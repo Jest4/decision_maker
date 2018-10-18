@@ -1,34 +1,37 @@
-
-$(document).ready(function() {
-
-$('.add_choice').unbind('click').bind('click',function(){
-	$('.poll_container').prepend(addChoices());
-
-});
-
-$(document).on('click', '.del_choice', function() {
-    $(this).parent().remove();
-});
+const number = 0;
 
 function addChoices(){
-return	`<section class = 'choices_box'>
-			<input type="text">
+return	`<section class='choices_box'>
+			<input type="text" name="title-${number}">
 			<button>Description</button>
 			<textarea class=description></textarea>
 			<button class="del_choice">Delete</button>
 		</section> `
 }
 
-	$('.poll_container').hide()
-	
-$('.create_poll').unbind('click').bind('click', function(){
+$(document).ready(function() {
+	$('body').on('click', '.add_choice', function(){
+		$('.poll_container').prepend(addChoices());
+	});
 
-	
-	$('.poll_container').slideDown();
-	$('.poll_container').show();
-	
-	
-});
+	$('body').on('click', '.del_choice', function() {
+	    $(this).parent().remove();
+	});
+
+	$('.poll_container').on('submit', function (event) {
+		event.preventDefault();
+		$(this).filter('')
+
+	})
+
+	// $('submit_poll').on('click', function(){
+	// 	storeData()
+	// });
+		
+	$('.create_poll').unbind('click').bind('click', function(){	
+		$('.poll_container').slideDown();
+		$('.poll_container').show();
+	});
 
 });
 
