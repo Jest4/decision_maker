@@ -45,22 +45,26 @@ app.get("/", (req, res) => {
 });
 
 //receives and processes new poll submission
-//displays completed poll, with action links
 app.post("/", (req, res) => {
 //receives and processes new poll submission
-//displays completed poll, with action links
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
+});
+
+//displays completed poll in the form that others can see it
+//features two action links, one to share results and one to check out results
+app.get("/poll/:id", (req, res) => {
+  res.render("/views/poll", templateVars)
 });
 
 
 //generates poll for voters to fill out
-app.get("/vote/:id", (req, res) => {
-  //
+app.get("/vote", (req, res) => {
+  res.render("votes")
 });
 
 //takes in poll data and sends a submission notification form
 app.post("/vote/submit", (req, res) => {
-  res.end("thanks for your vote! You eat soon.")
+  res.send("thanks for your vote! You eat soon.")
 });
 
 //shows results as they are tallied
