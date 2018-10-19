@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% let page_title = "iHangry Home Page" %>
+  <title><%= page_title%></title>
+
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/nestable.css" type="text/css" />
+</head>
+<body>
+  <header>
+    <% include partials/_header %>
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="col-8 col-md-6" style="background:#fefefe;">
+        <div class="dd" id="nestable3">
+          <ol class="dd-list">
+            <li class="dd-item dd3-item" data-id="13">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
+                <div class="row">
+                  <div class="col-6">
+                    Left side
+                  </div>
+                  <div class="col-6">
+                    <input type="text" placeholder="Enter description">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="dd-item dd3-item" data-id="14">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 14</div>
+            </li>
+            <li class="dd-item dd3-item" data-id="15">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 15</div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary poll-submit">Vote</button>
+
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/nestable.js"></script>
+  <script type="text/javascript" src="/scripts/app.js"></script>
+  <script type="text/javascript" src="/scripts/create_poll.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.dd').nestable({maxDepth:1});
+      $('.poll-submit').click(updateOutput);
+    });
+
+    let updateOutput = function() {
+      // console.log(window.JSON.stringify($(e.target).nestable('serialize')));
+      // TODO: add descriptions to data passed to server
+      $.post("/vote", {data: window.JSON.stringify($('.dd').nestable('serialize'))});
+    };
+  </script>
+
+
+</body>
+</html>
+

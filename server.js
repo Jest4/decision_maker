@@ -50,10 +50,18 @@ app.post("/", (req, res) => {
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
+app.get("/list", (req, res) => {
+  res.render("list");
+});
+
+
+
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
 app.get("/poll/:id", (req, res) => {
-  res.render("/views/poll", templateVars)
+  // res.render("/views/poll")
+  //test id: 1abcdefg
+  //test url: http://localhost:8080/poll/1abcdefg
 });
 
 
@@ -63,8 +71,8 @@ app.get("/vote", (req, res) => {
 });
 
 //takes in poll data and sends a submission notification form
-app.post("/vote/submit", (req, res) => {
-  res.send("thanks for your vote! You eat soon.")
+app.post("/vote", (req, res) => {
+  res.end(req.body.data);
 });
 
 //shows results as they are tallied
