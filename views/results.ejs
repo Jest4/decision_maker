@@ -7,8 +7,40 @@
 <body>
 
   <section>
-    <form method="POST" action="/final_results<%= :id%>" class="winner">
-    </form>
+
+<%for (let i=0; i < choices.length; i++) { %>
+
+choice <%= i+1 %>: <%=choices[i].choice_name%><br>
+
+<%}%>
+
+
   </section>
 
 </body>
+
+<!--
+knex('votes').select('choice_name')
+.join('choices', {'votes.choice_id': 'choices.choice_id'})
+.where('votes.poll_id' , 5)
+.groupBy('choice_name')
+.orderByRaw('sum(vote_weight) desc')
+.then(function(results) {
+for (var i = 0; i < results.length; i++) {
+ console.log(`choice ${ i + 1}, ${results[i].choice_name}`)
+}
+}); -->
+
+
+<!--
+knex('votes').select('choice_name')
+.join('choices', {'votes.choice_id': 'choices.choice_id'})
+.where('votes.poll_id' , 5)
+.where(' ')
+.groupBy('choice_name')
+.orderByRaw('sum(vote_weight) desc')
+.then(function(results) {
+for (var i = 0; i < results.length; i++) {
+ console.log(`choice ${ i + 1}, ${results[i].choice_name}`)
+}
+}); -->

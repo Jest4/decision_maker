@@ -15,21 +15,17 @@
     <% include partials/_header %>
   </header>
 
-<!--     <%=JSON.stringify(choices[0]);%>
-  <%=choices[0].choice_name;%>
-  <%=choices[0].choice_description;%> -->
-
   <div class="container">
     <div class="row">
       <div class="col-8 col-md-6" style="background:#fefefe;">
         <div class="dd" id="nestable3">
           <ol class="dd-list">
-              <% for (let i of choices) { %>
+            <% for (let i of choices) { %>
 
             <li class="dd-item dd3-item" data-id="<%=i.choice_id%>">
-              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content"><%= i.choice_name%>  - <%=i.choice_description%></div>
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
             </li>
-              <% } %>
+            <% } %>
           </ol>
         </div>
       </div>
@@ -48,7 +44,6 @@
     });
 
     let updateOutput = function() {
-      // console.log(window.JSON.stringify($(e.target).nestable('serialize')));
       // TODO: add descriptions to data passed to server
       $.post("/vote", {data: window.JSON.stringify($('.dd').nestable('serialize'))});
     };

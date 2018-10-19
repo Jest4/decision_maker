@@ -77,11 +77,23 @@ app.get("/vote/:id", (req, res) => {
 
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
-  res.end(req.body.data);
+  // TODO: figure out the redirection
+  // figure out a thank you pop up message
+  res.redirect("/");
 });
 
 //shows results as they are tallied
 app.get("/results/:id", (req, res) => {
+  let templateVars = {};
+  knex('votes').select('choice_name')
+  .join('choices', {'votes.choice_id': 'choices.choice_id'})
+  .where('votes.poll_id' , req.params.id)
+  .groupBy('choice_name')
+  .orderByRaw('sum(vote_weight) desc')
+  .then(function(results) {
+    templateVars.choices = results;
+    res.render("results", templateVars);
+ });
 //displays real-time poll results
 //allows you to choose criteria by which to display final tally
 });
