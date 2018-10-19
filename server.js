@@ -67,7 +67,7 @@ app.get("/poll/:id", (req, res) => {
 
 //generates poll for voters to fill out
 app.get("/vote", (req, res) => {
-  res.render("votes")
+  res.render("vote")
 });
 
 //takes in poll data and sends a submission notification form
