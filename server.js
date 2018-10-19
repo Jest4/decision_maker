@@ -67,11 +67,12 @@ app.get("/poll/:id", (req, res) => {
 
 //generates poll for voters to fill out
 app.get("/vote/:id", (req, res) => {
-  //add error handlers;
+  let templateVars = {};
+  //TODO: add error handlers
   knex("choices").where("poll_id", req.params.id).then((results)=> {
-    res.send(results);
+    templateVars.choices = results;
+    res.render("vote", templateVars);
   });
-  // res.render("vote")
 });
 
 //takes in poll data and sends a submission notification form

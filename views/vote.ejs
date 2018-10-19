@@ -14,20 +14,22 @@
   <header>
     <% include partials/_header %>
   </header>
+
+<!--     <%=JSON.stringify(choices[0]);%>
+  <%=choices[0].choice_name;%>
+  <%=choices[0].choice_description;%> -->
+
   <div class="container">
     <div class="row">
       <div class="col-8 col-md-6" style="background:#fefefe;">
         <div class="dd" id="nestable3">
           <ol class="dd-list">
-            <li class="dd-item dd3-item" data-id="13">
-              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 13</div>
+              <% for (let i of choices) { %>
+
+            <li class="dd-item dd3-item" data-id="<%=i.choice_id%>">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content"><%= i.choice_name%>  - <%=i.choice_description%></div>
             </li>
-            <li class="dd-item dd3-item" data-id="14">
-              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 14</div>
-            </li>
-            <li class="dd-item dd3-item" data-id="15">
-              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 15</div>
-            </li>
+              <% } %>
           </ol>
         </div>
       </div>
