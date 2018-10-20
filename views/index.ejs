@@ -4,7 +4,8 @@
 	<head>
 		<% let page_title = "iHangry Home Page" %>
 		<title><%= page_title%></title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css" />
+		<script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
 		<link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
 		<link rel="stylesheet" href="/styles/layout.css" type="text/css" />
@@ -15,8 +16,6 @@
 		</header>
 
 		<button class = 'create_poll'>Create Poll:</button>
-		
-
 		<br>
 		<br>
 		<form class= 'poll_container' style="display: none">
@@ -28,7 +27,7 @@
 
 			<section class = 'choices_box'>
 				<input class='choice_title' type="text" required>
-				<button>Description</button>
+				<label>Description</label>
 				<textarea class=choice_desc></textarea>
 				<button class="del_choice">Delete</button>
 			</section>
@@ -39,10 +38,13 @@
 			<button class="add_choice">+</button>
 			<button class = 'submit_poll'>Submit</button>
 		</form>
-    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-		<script type="text/javascript" src="/scripts/app.js"></script>
-		<script type="text/javascript" src="/scripts/create_poll.js"></script>
+
+		<script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/scripts/app.js"></script>
+        <script type="text/javascript" src="/scripts/create_poll.js"></script>
+
+		
+  
 	</body>
 </html>
 
