@@ -50,25 +50,59 @@ app.post("/", (req, res) => {
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
+app.get("/list", (req, res) => {
+  res.render("list");
+});
+
+
+
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
 app.get("/poll/:id", (req, res) => {
-  res.render("/views/poll", templateVars)
+  // res.render("/views/poll")
+  //test id: 1abcdefg
+  //test url: http://localhost:8080/poll/1abcdefg
 });
 
 
 //generates poll for voters to fill out
-app.get("/vote", (req, res) => {
-  res.render("votes")
+app.get("/vote/:id", (req, res) => {
+  let templateVars = {};
+  //TODO: add error handlers
+  knex("choices").where("poll_id", req.params.id).then((results)=> {
+    templateVars.choices = results;
+    res.render("vote", templateVars);
+  });
 });
 
 //takes in poll data and sends a submission notification form
-app.post("/vote/submit", (req, res) => {
-  res.send("thanks for your vote! You eat soon.")
+app.post("/vote", (req, res) => {
+  // TODO: figure out the redirection
+  // figure out a thank you pop up message
+  res.redirect("/");
 });
 
 //shows results as they are tallied
 app.get("/results/:id", (req, res) => {
+  let templateVars = {};
+
+  knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
+  .join('choices', {'votes.choice_id': 'choices.choice_id'})
+  .where('votes.poll_id' , req.params.id)
+  .groupBy('choice_name')
+  .orderByRaw('sum(vote_weight) desc')
+  .then(function(results) {
+    templateVars.choices = results;
+
+    knex('votes').distinct('voter_name')
+    .where('votes.poll_id', req.params.id)
+    .select()
+    .then(function(res2) {
+      templateVars.names= res2;
+      res.render('results', templateVars)
+    });
+ });
+
 //displays real-time poll results
 //allows you to choose criteria by which to display final tally
 });
