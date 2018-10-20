@@ -3,6 +3,7 @@
 
 <head>
   <% let page_title = "iHangry Vote" %>
+
   <title><%= page_title%></title>
 
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
@@ -15,6 +16,11 @@
     <% include partials/_header %>
   </header>
 
+
+  <br>
+  <h1><%=choices[0].poll_title%></h1>
+  <br>
+  <input id="voter_name" name="voter_name" type="text" placeholder="enter your name">
   <div class="container">
     <div class="row">
       <div class="col-8 col-md-6" style="background:#fefefe;">
@@ -36,7 +42,7 @@
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/nestable.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
-  <script type="text/javascript" src="/scripts/create_poll.js"></script>
+  <!-- <script type="text/javascript" src="/scripts/create_poll.js"></script> -->
   <script type="text/javascript">
     $(document).ready(function(){
       $('.dd').nestable({maxDepth:1});
@@ -45,7 +51,7 @@
 
     let updateOutput = function() {
       // TODO: add descriptions to data passed to server
-      $.post("/vote", {data: window.JSON.stringify($('.dd').nestable('serialize'))});
+      $.post("/vote", {voter_name: $('#voter_name').val(), data: window.JSON.stringify($('.dd').nestable('serialize'))});
     };
   </script>
 
