@@ -15,15 +15,26 @@
 		</header>
 
 		<button class = 'create_poll'>Create Poll:</button>
+		
+
 		<br>
 		<br>
 		<form class= 'poll_container' style="display: none">
+			
+		<section class="choices_container">
+			<input class='creator_email' type="email" placeholder="Enter your email" required>
+		<input class='poll_title' type="text" placeholder="Enter Poll title." required>
+		<br>
+
 			<section class = 'choices_box'>
-				<input class='choice_title' type="text">
+				<input class='choice_title' type="text" required>
 				<button>Description</button>
-				<textarea class=description></textarea>
+				<textarea class=choice_desc></textarea>
 				<button class="del_choice">Delete</button>
 			</section>
+
+		</section>
+			
 
 			<button class="add_choice">+</button>
 			<button class = 'submit_poll'>Submit</button>
