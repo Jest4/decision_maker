@@ -69,7 +69,9 @@ app.get("/poll/:id", (req, res) => {
 app.get("/vote/:id", (req, res) => {
   let templateVars = {};
   //TODO: add error handlers
-  knex("choices").where("poll_id", req.params.id).then((results)=> {
+  knex("choices").leftJoin("polls", "polls.poll_id", "choices.poll_id")
+  .where("choices.poll_id", req.params.id)
+  .then((results) => {
     templateVars.choices = results;
     res.render("vote", templateVars);
   });
@@ -77,6 +79,11 @@ app.get("/vote/:id", (req, res) => {
 
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
+  console.log(req.body.voter_name);
+// voting should lead to
+// for (var i = 0; i < req.body.data.length; i++) {
+//  knex('votes').insert({voter_name: 'req.body.name???', choice_id: req.body.data[i], vote_weight: [(req.body.data.length)-i] })
+// }
   // TODO: figure out the redirection
   // figure out a thank you pop up message
   res.redirect("/");
@@ -101,7 +108,7 @@ app.get("/results/:id", (req, res) => {
       templateVars.names= res2;
       res.render('results', templateVars)
     });
- });
+  });
 
 //displays real-time poll results
 //allows you to choose criteria by which to display final tally
