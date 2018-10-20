@@ -7,8 +7,32 @@
 <body>
 
   <section>
-    <form method="POST" action="/final_results<%= :id%>" class="winner">
-    </form>
+
+Get your bib ready, you eat here: <%=choices[0].choice_name%>
+
+<br>
+<br>
+
+<%for (let i=0; i < choices.length; i++) { %>
+
+<%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
+
+<%}%>
+
+<br>
+
+Voters:
+<br>
+
+<%for (let i=0; i < names.length; i++) { %>
+
+<%=names[i].voter_name%><br>
+
+<%}%>
+
+<br>
+
   </section>
 
 </body>
+

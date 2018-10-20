@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% let page_title = "iHangry Home Page" %>
+  <title><%= page_title%></title>
+
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/nestable.css" type="text/css" />
+</head>
+<body>
+  <header>
+    <% include partials/_header %>
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="col-8 col-md-6" style="background:#fefefe;">
+        <div class="dd" id="nestable3">
+          <ol class="dd-list">
+            <li class="dd-item dd3-item" data-id="13">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
+                <div class="row">
+                  <div class="col-6">
+                    Left side
+                  </div>
+                  <div class="col-6">
+                    <input type="text" placeholder="Enter description">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="dd-item dd3-item" data-id="14">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 14</div>
+            </li>
+            <li class="dd-item dd3-item" data-id="15">
+              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 15</div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary poll-submit">Vote</button>
+
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/nestable.js"></script>
+  <script type="text/javascript" src="/scripts/app.js"></script>
+  <script type="text/javascript" src="/scripts/create_poll.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.dd').nestable({maxDepth:1});
+      $('.poll-submit').click(updateOutput);
+    });
+
+    let updateOutput = function() {
+      // console.log(window.JSON.stringify($(e.target).nestable('serialize')));
+      // TODO: add descriptions to data passed to server
+      $.post("/vote", {data: window.JSON.stringify($('.dd').nestable('serialize'))});
+    };
+  </script>
+
+
+</body>
+</html>
+
+
+TODO:
+
+Index / Home page:
+-description entries may not need to be buttons, but if they are, they should appear and disappear the text area
+-submit button needs to create an appropriate db entry
+-submit button should take you to your display poll page
+-submit button should also email the admin two links, along with some poll details
+-the "create poll" button should toggle the form
+
+
+Your Poll Page:
+-should display info by way of a poll, from the home page
+-should display two links: one to the final results and one to the vote page
+-both links should be clickable, and should take you to their respective pages
+-both links could have a "select" button near them user doesn't have to do it pleb-style
+
+Vote Page:
+-requires name submission input
+-name entry data-handler
+-on click event handler
+-redirect to home page
+-message notifying voter that their vote has been accepted and will be tallied
+-error message if they miss their name
+-error catch?
+
+Results Page:
+-needs to display a url for distribution
+-needs to hyperlink winning option to the "final results" page
+-needs error handling (maybe?)
+
+Rinal Results Page:
+-needs to feature winning option
+-needs handler and js code to generate winning option
+
+Database:
+-is there anything outstanding?
+
+General:
+-nav bar should be created
+-we should create a blank "about page" and a blank "FAQ" page
+-copy for everything should be thoughtful and on brand
+-random string generators need to be created to handle each unique poll as well as corresponding result and final results pages
+-all css and design needs to be done
+
+FINAL:
+-code needs to be reorganized, cleaned up, refactored, etc.
+-filing system needs to be reviewed and reorganized:
+  -is the gitignore folder up to date?
+  -do we have any unnecessary code?
+  -is everything well commented and clear?
+-README needs to be written accurately, and with style, markup and brand personality
+-presentation talking points need to be planned out:
+  -project intro: what problem are we trying to solve? speak from the perspective of our target user
+  -project demo: what is our story ark? what is our resolution? what is our wow factor?
+
+  -we should also be prepared to speak to the following:
+  -who we are, our background, and our experience thus far
+  -what each of us contributed
+  -what we found most challenging / what we learned / how we worked through things
+
