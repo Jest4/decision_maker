@@ -8,39 +8,31 @@
 
   <section>
 
+Get your bib ready, you eat here: <%=choices[0].choice_name%>
+
+<br>
+<br>
+
 <%for (let i=0; i < choices.length; i++) { %>
 
-choice <%= i+1 %>: <%=choices[i].choice_name%><br>
+<%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
 
 <%}%>
 
+<br>
+
+Voters:
+<br>
+
+<%for (let i=0; i < names.length; i++) { %>
+
+<%=names[i].voter_name%><br>
+
+<%}%>
+
+<br>
 
   </section>
 
 </body>
 
-<!--
-knex('votes').select('choice_name')
-.join('choices', {'votes.choice_id': 'choices.choice_id'})
-.where('votes.poll_id' , 5)
-.groupBy('choice_name')
-.orderByRaw('sum(vote_weight) desc')
-.then(function(results) {
-for (var i = 0; i < results.length; i++) {
- console.log(`choice ${ i + 1}, ${results[i].choice_name}`)
-}
-}); -->
-
-
-<!--
-knex('votes').select('choice_name')
-.join('choices', {'votes.choice_id': 'choices.choice_id'})
-.where('votes.poll_id' , 5)
-.where(' ')
-.groupBy('choice_name')
-.orderByRaw('sum(vote_weight) desc')
-.then(function(results) {
-for (var i = 0; i < results.length; i++) {
- console.log(`choice ${ i + 1}, ${results[i].choice_name}`)
-}
-}); -->

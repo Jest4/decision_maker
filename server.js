@@ -85,15 +85,24 @@ app.post("/vote", (req, res) => {
 //shows results as they are tallied
 app.get("/results/:id", (req, res) => {
   let templateVars = {};
-  knex('votes').select('choice_name')
+
+  knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
   .where('votes.poll_id' , req.params.id)
   .groupBy('choice_name')
   .orderByRaw('sum(vote_weight) desc')
   .then(function(results) {
     templateVars.choices = results;
-    res.render("results", templateVars);
+
+    knex('votes').distinct('voter_name')
+    .where('votes.poll_id', req.params.id)
+    .select()
+    .then(function(res2) {
+      templateVars.names= res2;
+      res.render('results', templateVars)
+    });
  });
+
 //displays real-time poll results
 //allows you to choose criteria by which to display final tally
 });
