@@ -50,7 +50,6 @@ app.use(morgan('dev'));
 app.use(knexLogger(knex));
 
 app.set("view engine", "ejs");
-// app.engine('ejs', require('express-ejs-extend'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/styles", sass({
   src: __dirname + "/styles",
@@ -66,7 +65,7 @@ app.use("/api/users", usersRoutes(knex));
 // home page allows you to create a poll via
 // event listener which toggles the poll
 app.get("/", (req, res) => {
-  res.render("index", {title: "Create Poll"});
+  res.render("index");
 });
 
 //receives and processes new poll submission
@@ -93,7 +92,7 @@ let results_url = stringGen()
 });
 
 app.get("/list", (req, res) => {
-  res.render("list", {title: "Create Poll"});
+  res.render("list");
 });
 
 
@@ -101,7 +100,7 @@ app.get("/list", (req, res) => {
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
 app.get("/poll/:id", (req, res) => {
-  // res.render("/views/poll", {title: "Create Poll"})
+  // res.render("/views/poll")
   //test id: 1abcdefg
   //test url: http://localhost:8080/poll/1abcdefg
 });
@@ -115,7 +114,7 @@ app.get("/vote/:id", (req, res) => {
   .where("choices.poll_id", req.params.id)
   .then((results) => {
     templateVars.choices = results;
-    templateVars.title = "iHANGRY vote";
+    // console.log('TEMPLATEVARS = ',templateVars)
     res.render("vote", templateVars);
   });
 });
@@ -153,8 +152,7 @@ app.get("/results/:id", (req, res) => {
     .where('polls.result_link', req.params.id)
     .select()
     .then(function(res2) {
-      templateVars.names = res2;
-      templateVars.title = 'results';
+      templateVars.names= res2;
       res.render('results', templateVars)
     });
   });
@@ -171,7 +169,6 @@ app.post("/results/:id", (req, res) => {
 });
 
 app.get("/final_results/:id", (req, res) => {
-  // {title: "Create Poll"} --don't forget!
   //displays where you will eat!
 });
 

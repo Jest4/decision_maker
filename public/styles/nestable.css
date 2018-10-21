@@ -12,7 +12,7 @@
 .dd-empty,
 .dd-placeholder { display: block; position: relative; margin: 0; padding: 0; min-height: 20px; font-size: 13px; line-height: 20px; }
 
-.dd-handle { display: block; height: 32px; margin: 5px 0; padding: 5px 10px; color: #333; text-decoration: none; font-weight: bold; border: 1px solid #ccc;
+.dd-handle { display: block; height: 30px; margin: 5px 0; padding: 5px 10px; color: #333; text-decoration: none; font-weight: bold; border: 1px solid #ccc;
     background: #fafafa;
     background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
     background:    -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
@@ -47,6 +47,9 @@
             box-shadow: 2px 4px 6px 0 rgba(0,0,0,.1);
 }
 
+/**
+ * Nestable Extras
+ */
 
 .nestable-lists { display: block; clear: both; padding: 30px 0; width: 100%; border: 0; border-top: 2px solid #ddd; border-bottom: 2px solid #ddd; }
 
@@ -65,22 +68,21 @@
 }
 #nestable2 .dd-handle:hover { background: #bbb; }
 #nestable2 .dd-item > button:before { color: #fff; }
-/*
+
 @media only screen and (min-width: 700px) {
 
     .dd { float: left; width: 48%; }
     .dd + .dd { margin-left: 2%; }
 
 }
-*/
+
 .dd-hover > .dd-handle { background: #2ea8e5 !important; }
 
-/*
- Nestable Draggable Handles
+/**
+ * Nestable Draggable Handles
  */
 
-.dd3-content { display: block; margin: 5px 0; padding: 5px 10px 5px 40px; color: #333; text-decoration: none; font-weight: bold; border: 1px solid #ccc;
-    /* height: 30px; */
+.dd3-content { display: block; height: 30px; margin: 5px 0; padding: 5px 10px 5px 40px; color: #333; text-decoration: none; font-weight: bold; border: 1px solid #ccc;
     background: #fafafa;
     background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
     background:    -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
@@ -89,7 +91,7 @@
             border-radius: 3px;
     box-sizing: border-box; -moz-box-sizing: border-box;
 }
-.dd3-content:hover { color: #9c27b0; background: #fff; }
+.dd3-content:hover { color: #2ea8e5; background: #fff; }
 
 .dd-dragel > .dd3-item > .dd3-content { margin: 0; }
 
@@ -104,5 +106,5 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-.dd3-handle:before { content: '≡'; color:#fff; display: block; position: absolute; left: 0; top: 3px; width: 100%; text-align: center; text-indent: 0; font-size: 20px; font-weight: normal; }
+.dd3-handle:before { content: '≡'; display: block; position: absolute; left: 0; top: 3px; width: 100%; text-align: center; text-indent: 0; color: #fff; font-size: 20px; font-weight: normal; }
 .dd3-handle:hover { background: #ddd; }
