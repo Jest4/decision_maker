@@ -29,10 +29,7 @@ exports.seed = function(knex, Promise) {
         knex('choices').insert({choice_id: 10025, choice_name:'Chipotle', choice_description: 'i hope i dont need chipotlaway', poll_id: 10005}),
         knex('choices').insert({choice_id: 10026, choice_name:'Burrito Boyz', choice_description: 'gotta get that taco fix', poll_id: 10005}),
         knex('choices').insert({choice_id: 10027, choice_name:'Timmys', choice_description: 'i already thought i bottomed out', poll_id: 10005}),
-        knex('choices').insert({choice_id: 10028, choice_name:'A dubs', choice_description: 'go beyond', poll_id: 10005})
-
-
-
+        knex('choices').insert({choice_id: 10028, choice_name:'A dubs', choice_description: 'go beyond', poll_id: 10005}
 
       ]);
     });

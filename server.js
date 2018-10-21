@@ -18,7 +18,7 @@ const api_key = process.env.MAILGUN_KEY
 const DOMAIN = 'mg.ihangry.ca';
 const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-function emailAdmin(poll_data) {
+function emailAdmin() {
 //THIS IS SEED DATA, should be passed data, admin_email can be sourced from req.body of post, others from keygen vars
     // NEED TO ADJUST TO INCLUDE LINKS
     // vote_link : vote_url,
@@ -29,22 +29,13 @@ function emailAdmin(poll_data) {
     to: poll_data.admin_email,
     subject: `${poll_data.poll_name} Poll Created on iHangry`,
     text: `Your poll has been created with the following URLs:
-    VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-    ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+    VOTING! (send out this link!) http://localhost:8080/vote/{poll_data.vote_link} !
+    ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/vote/{poll_data.result_link}`
   };
 
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
   });
-}
-
-function stringGen() {
-  let newString = "";
-  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < 8; i++) {
-    newString += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return newString;
 }
 
 // Seperated Routes for each Resource
@@ -105,6 +96,8 @@ app.get("/list", (req, res) => {
   res.render("list", {title: "Create Poll"});
 });
 
+
+
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
 app.get("/poll/:id", (req, res) => {
@@ -119,7 +112,7 @@ app.get("/vote/:id", (req, res) => {
   let templateVars = {};
   //TODO: add error handlers
   knex("choices").leftJoin("polls", "polls.poll_id", "choices.poll_id")
-  .where("polls.vote_link", req.params.id)
+  .where("choices.poll_id", req.params.id)
   .then((results) => {
     templateVars.choices = results;
     templateVars.title = "iHANGRY vote";
@@ -129,7 +122,6 @@ app.get("/vote/:id", (req, res) => {
 
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
-// voting should lead to
 let voting = []
   for (var i = 0; i < req.body.data.length; i++) {
    voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
