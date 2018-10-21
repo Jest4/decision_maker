@@ -5,3 +5,23 @@ body {
 body h1 {
   color: #244751;
 }
+
+.logo {
+  height: 60px;
+}
+
+.on-brand {
+  background-color: #ff9800;
+  border-color: #ff9800;
+  color: #fff;
+}
+
+.on-brand:hover {
+  background-color: #f29205;
+  border-color: #ff9800;
+  color: #fff;
+}
+
+.navbar-toggler:focus {
+  outline-color: #9c27b0;
+}

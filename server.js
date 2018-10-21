@@ -50,6 +50,7 @@ app.use(morgan('dev'));
 app.use(knexLogger(knex));
 
 app.set("view engine", "ejs");
+// app.engine('ejs', require('express-ejs-extend'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/styles", sass({
   src: __dirname + "/styles",
@@ -65,17 +66,34 @@ app.use("/api/users", usersRoutes(knex));
 // home page allows you to create a poll via
 // event listener which toggles the poll
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", {title: "Create Poll"});
 });
 
 //receives and processes new poll submission
 app.post("/", (req, res) => {
 //receives and processes new poll submission
+// console.log(req.body)
+let vote_url = stringGen()
+let results_url = stringGen()
+  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
+  .returning('poll_id').then(function(poll_id_val){
+    let choices = req.body.choice_title;
+    let descriptions = req.body.choice_desc;
+    let choiceArray = []
+    choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
+    knex('choices').insert(choiceArray)
+      .then(function(results) {console.log('inserted choice')});
+      });
+  console.log('votepage: localhost:8080/vote/' + vote_url)
+  console.log('resultpage: localhost:8080/results/' + results_url)
+  let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
+  // EMAIL ADMIN WORKS! ENABLE BELOW
+  // emailAdmin(poll_data)
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
 app.get("/list", (req, res) => {
-  res.render("list");
+  res.render("list", {title: "Create Poll"});
 });
 
 
@@ -83,7 +101,7 @@ app.get("/list", (req, res) => {
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
 app.get("/poll/:id", (req, res) => {
-  // res.render("/views/poll")
+  // res.render("/views/poll", {title: "Create Poll"})
   //test id: 1abcdefg
   //test url: http://localhost:8080/poll/1abcdefg
 });
@@ -97,17 +115,21 @@ app.get("/vote/:id", (req, res) => {
   .where("choices.poll_id", req.params.id)
   .then((results) => {
     templateVars.choices = results;
+    templateVars.title = "iHANGRY vote";
     res.render("vote", templateVars);
   });
 });
 
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
-  console.log(req.body.voter_name);
-// voting should lead to
-// for (var i = 0; i < req.body.data.length; i++) {
-//  knex('votes').insert({voter_name: 'req.body.name???', choice_id: req.body.data[i], vote_weight: [(req.body.data.length)-i] })
-// }
+let voting = []
+  for (var i = 0; i < req.body.data.length; i++) {
+   voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
+  }
+  // console.log('VOTING', voting)
+    knex('votes').insert(voting)
+      .then(function(results) {console.log('inserted choice')});
+      // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
   res.redirect("/");
@@ -116,20 +138,23 @@ app.post("/vote", (req, res) => {
 //shows results as they are tallied
 app.get("/results/:id", (req, res) => {
   let templateVars = {};
-
+  // knex('polls').select('poll_id').where('result_link', req.params.id).then(function(results) {templateVars.poll_id = results;})
   knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
-  .where('votes.poll_id' , req.params.id)
+  .join('polls', {'votes.poll_id' : 'polls.poll_id'})
+  .where('polls.result_link' , req.params.id)
   .groupBy('choice_name')
   .orderByRaw('sum(vote_weight) desc')
   .then(function(results) {
     templateVars.choices = results;
 
     knex('votes').distinct('voter_name')
-    .where('votes.poll_id', req.params.id)
+    .join('polls', {'votes.poll_id' : 'polls.poll_id'})
+    .where('polls.result_link', req.params.id)
     .select()
     .then(function(res2) {
-      templateVars.names= res2;
+      templateVars.names = res2;
+      templateVars.title = 'results';
       res.render('results', templateVars)
     });
   });
@@ -146,6 +171,7 @@ app.post("/results/:id", (req, res) => {
 });
 
 app.get("/final_results/:id", (req, res) => {
+  // {title: "Create Poll"} --don't forget!
   //displays where you will eat!
 });
 
