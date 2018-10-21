@@ -18,7 +18,7 @@ const api_key = process.env.MAILGUN_KEY
 const DOMAIN = 'mg.ihangry.ca';
 const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-function emailAdmin() {
+function emailAdmin(poll_data) {
 //THIS IS SEED DATA, should be passed data, admin_email can be sourced from req.body of post, others from keygen vars
     // NEED TO ADJUST TO INCLUDE LINKS
     // vote_link : vote_url,
@@ -29,13 +29,22 @@ function emailAdmin() {
     to: poll_data.admin_email,
     subject: `${poll_data.poll_name} Poll Created on iHangry`,
     text: `Your poll has been created with the following URLs:
-    VOTING! (send out this link!) http://localhost:8080/vote/{poll_data.vote_link} !
-    ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/vote/{poll_data.result_link}`
+    VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
+    ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
   };
 
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
   });
+}
+
+function stringGen() {
+  let newString = "";
+  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < 8; i++) {
+    newString += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return newString;
 }
 
 // Seperated Routes for each Resource
@@ -71,14 +80,28 @@ app.get("/", (req, res) => {
 //receives and processes new poll submission
 app.post("/", (req, res) => {
 //receives and processes new poll submission
+console.log(req.body)
+let vote_url = stringGen()
+let results_url = stringGen()
+  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
+  .returning('poll_id').then(function(poll_id_val){
+    let choices = req.body.choice_title;
+    let descriptions = req.body.choice_desc;
+    let choiceArray = []
+    choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
+    knex('choices').insert(choiceArray)
+      .then(function(results) {console.log('inserted choice')});
+      });
+  console.log('votepage: localhost:8080/vote/' + vote_url)
+  let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
+  // EMAIL ADMIN WORKS! ENABLE BELOW
+  // emailAdmin(poll_data)
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
 app.get("/list", (req, res) => {
   res.render("list");
 });
-
-
 
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
@@ -94,7 +117,7 @@ app.get("/vote/:id", (req, res) => {
   let templateVars = {};
   //TODO: add error handlers
   knex("choices").leftJoin("polls", "polls.poll_id", "choices.poll_id")
-  .where("choices.poll_id", req.params.id)
+  .where("polls.vote_link", req.params.id)
   .then((results) => {
     templateVars.choices = results;
     res.render("vote", templateVars);
@@ -105,9 +128,9 @@ app.get("/vote/:id", (req, res) => {
 app.post("/vote", (req, res) => {
   console.log(req.body.voter_name);
 // voting should lead to
-// for (var i = 0; i < req.body.data.length; i++) {
-//  knex('votes').insert({voter_name: 'req.body.name???', choice_id: req.body.data[i], vote_weight: [(req.body.data.length)-i] })
-// }
+for (var i = 0; i < req.body.data.length; i++) {
+ knex('votes').insert({voter_name: req.body.voter_name, choice_id: req.body.data[i], vote_weight: [(req.body.data.length)-i] })
+}
   // TODO: figure out the redirection
   // figure out a thank you pop up message
   res.redirect("/");
