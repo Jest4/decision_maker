@@ -31,6 +31,15 @@ Voters:
 <%}%>
 
 <br>
+<br>
+
+<a href="/final_results/<%= final_result_link %>">Tell your comrades:</a>
+
+<script>
+  let host = location.protocol+'//'+location.hostname+(location.port ? ':' +location.port: '');
+  document.write(host+"/final_results/<%=final_result_link%>");
+</script>
+
 
   </section>
 
