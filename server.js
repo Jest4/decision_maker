@@ -92,6 +92,7 @@ let results_url = stringGen()
     knex('choices').insert(choiceArray)
       .then(function(results) {console.log('inserted choice')});
       });
+  console.log('votepage: localhost:8080/vote/' + vote_url)
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
@@ -115,7 +116,7 @@ app.get("/vote/:id", (req, res) => {
   let templateVars = {};
   //TODO: add error handlers
   knex("choices").leftJoin("polls", "polls.poll_id", "choices.poll_id")
-  .where("choices.poll_id", req.params.id)
+  .where("polls.vote_link", req.params.id)
   .then((results) => {
     templateVars.choices = results;
     res.render("vote", templateVars);
