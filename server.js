@@ -120,6 +120,7 @@ app.get("/vote/:id", (req, res) => {
   .where("polls.vote_link", req.params.id)
   .then((results) => {
     templateVars.choices = results;
+    console.log('TEMPLATEVARS = ',templateVars)
     res.render("vote", templateVars);
   });
 });
@@ -127,10 +128,16 @@ app.get("/vote/:id", (req, res) => {
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
   console.log(req.body.voter_name);
+  console.log('VOTE REQBODY ',req.body, 'END REQ BODY')
 // voting should lead to
-for (var i = 0; i < req.body.data.length; i++) {
- knex('votes').insert({voter_name: req.body.voter_name, choice_id: req.body.data[i], vote_weight: [(req.body.data.length)-i] })
-}
+let voting = []
+  for (var i = 0; i < req.body.data.length; i++) {
+   voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
+  }
+  console.log('VOTING', voting)
+    knex('votes').insert(voting)
+      .then(function(results) {console.log('inserted choice')});
+      // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
   res.redirect("/");
