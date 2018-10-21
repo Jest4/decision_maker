@@ -23,23 +23,23 @@ function emailAdmin(poll_data, mailtype) {
     // NEED TO ADJUST TO INCLUDE LINKS
     // vote_link : vote_url,
     // result_link : results_url
-  if (mailtype == "new") {
+  if (mailtype == "create") {
     let data = {
       from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
       to: poll_data.admin_email,
       subject: `${poll_data.poll_name} Poll Created on iHangry`,
-      text: `Your poll has been created with the following URLs:
+      text: `Your poll, "${poll_data.poll_name}" has been created with the following URLs:
       VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}`
     };
-  } else if (mailtype == "new") {
+  } else if (mailtype == "vote") {
     let data = {
       from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
       to: poll_data.admin_email,
-      subject: `${poll_data.poll_name} Poll Created on iHangry`,
-      text: `Your poll has been created with the following URLs:
-      VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+      subject: `Vote submitted to ${poll_data.poll_name}`,
+      text: `Someone has submitted a vote to your poll, ${poll_data.poll_name}!
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}
+      Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.final_result_link}`
     };
   }
   mailgun.messages().send(data, function (error, body) {
@@ -106,7 +106,7 @@ let results_url = stringGen()
   console.log('resultpage: localhost:8080/results/' + results_url)
   let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
-  // emailAdmin(poll_data)
+  // emailAdmin(poll_data, "create")
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
@@ -141,7 +141,7 @@ app.post("/vote", (req, res) => {
 // voting should lead to
 let voting = []
   for (var i = 0; i < req.body.data.length; i++) {
-   voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
+    voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
   }
   // console.log('VOTING', voting)
     knex('votes').insert(voting)
@@ -149,6 +149,7 @@ let voting = []
       // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
+  // emailAdmin()
   res.redirect("/");
 });
 
