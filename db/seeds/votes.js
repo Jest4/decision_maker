@@ -306,7 +306,7 @@ exports.seed = function(knex, Promise) {
         knex('votes').insert({voter_name: 'NAME26', choice_id: 100026, poll_id: 10005, vote_weight: 3}),
         knex('votes').insert({voter_name: 'NAME26', choice_id: 100027, poll_id: 10005, vote_weight: 2}),
         knex('votes').insert({voter_name: 'NAME26', choice_id: 100028, poll_id: 10005, vote_weight: 1})
->>>>>>> cadff9861d19e4c555c3f07e6b902e6dbbe4a350
+
       ]);
     });
 };
