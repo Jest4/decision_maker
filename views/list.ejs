@@ -44,7 +44,10 @@
   </div>
   <button type="button" class="btn btn-primary poll-submit">Vote</button>
 
-
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/nestable.js"></script>
+  <script type="text/javascript" src="/scripts/app.js"></script>
+  <script type="text/javascript" src="/scripts/create_poll.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('.dd').nestable({maxDepth:1});
@@ -57,6 +60,7 @@
       $.post("/vote", {data: window.JSON.stringify($('.dd').nestable('serialize'))});
     };
   </script>
+
 
 </body>
 </html>
