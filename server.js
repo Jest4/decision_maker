@@ -80,7 +80,7 @@ app.get("/", (req, res) => {
 //receives and processes new poll submission
 app.post("/", (req, res) => {
 //receives and processes new poll submission
-console.log(req.body)
+// console.log(req.body)
 let vote_url = stringGen()
 let results_url = stringGen()
   knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
@@ -121,21 +121,19 @@ app.get("/vote/:id", (req, res) => {
   .where("polls.vote_link", req.params.id)
   .then((results) => {
     templateVars.choices = results;
-    console.log('TEMPLATEVARS = ',templateVars)
+    // console.log('TEMPLATEVARS = ',templateVars)
     res.render("vote", templateVars);
   });
 });
 
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
-  console.log(req.body.voter_name);
-  console.log('VOTE REQBODY ',req.body, 'END REQ BODY')
 // voting should lead to
 let voting = []
   for (var i = 0; i < req.body.data.length; i++) {
    voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
   }
-  console.log('VOTING', voting)
+  // console.log('VOTING', voting)
     knex('votes').insert(voting)
       .then(function(results) {console.log('inserted choice')});
       // });
