@@ -93,6 +93,7 @@ let results_url = stringGen()
       .then(function(results) {console.log('inserted choice')});
       });
   console.log('votepage: localhost:8080/vote/' + vote_url)
+  console.log('resultpage: localhost:8080/results/' + results_url)
   let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
   // emailAdmin(poll_data)
@@ -146,17 +147,19 @@ let voting = []
 //shows results as they are tallied
 app.get("/results/:id", (req, res) => {
   let templateVars = {};
-
+  // knex('polls').select('poll_id').where('result_link', req.params.id).then(function(results) {templateVars.poll_id = results;})
   knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
-  .where('votes.poll_id' , req.params.id)
+  .join('polls', {'votes.poll_id' : 'polls.poll_id'})
+  .where('polls.result_link' , req.params.id)
   .groupBy('choice_name')
   .orderByRaw('sum(vote_weight) desc')
   .then(function(results) {
     templateVars.choices = results;
 
     knex('votes').distinct('voter_name')
-    .where('votes.poll_id', req.params.id)
+    .join('polls', {'votes.poll_id' : 'polls.poll_id'})
+    .where('polls.result_link', req.params.id)
     .select()
     .then(function(res2) {
       templateVars.names= res2;
