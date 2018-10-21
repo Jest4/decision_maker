@@ -32,6 +32,9 @@ function emailAdmin(poll_data, mailtype) {
       VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
       ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}`
     };
+  mailgun.messages().send(data, function (error, body) {
+    console.log(body);
+  });
   } else if (mailtype == "vote") {
     let data = {
       from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
@@ -41,10 +44,10 @@ function emailAdmin(poll_data, mailtype) {
       ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}
       Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.final_result_link}`
     };
-  }
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
   });
+  }
 }
 
 function stringGen() {
@@ -93,7 +96,8 @@ app.post("/", (req, res) => {
 // console.log(req.body)
 let vote_url = stringGen()
 let results_url = stringGen()
-  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
+let final_results_url = stringGen()
+  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url, final_result_link: final_results_url})
   .returning('poll_id').then(function(poll_id_val){
     let choices = req.body.choice_title;
     let descriptions = req.body.choice_desc;
@@ -145,11 +149,18 @@ let voting = []
   }
   // console.log('VOTING', voting)
     knex('votes').insert(voting)
-      .then(function(results) {console.log('inserted choice')});
+      .returning("*")
+      .then(function(results) {
+        knex('polls').select().where('poll_id' , results[0].poll_id)
+        .then(function(results) {
+        let poll_data = {poll_name: results[0].poll_title, admin_email: results[0].admin_email, admin_link: results[0].result_link, result_link: results[0].final_result_link}
+        console.log("POLL DATA:", poll_data, "\n / POLL DATA")
+        // emailAdmin(poll_data, "vote");
+        })
+        console.log('RESULTS', results , "\n END RESULTS")});
       // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
-  // emailAdmin()
   res.redirect("/");
 });
 
