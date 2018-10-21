@@ -1,48 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <% let page_title = "iHangry Vote" %>
-
-  <title><%= page_title%></title>
-
-  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-  <link rel="stylesheet" href="/styles/nestable.css" type="text/css" />
-</head>
+<% include partials/_header %>
 <body>
-  <header>
-    <% include partials/_header %>
-  </header>
-
-
-  <br>
-  <h1><%=choices[0].poll_title%></h1>
-  <br>
-  <input id="voter_name" name="voter_name" type="text" placeholder="enter your name">
+  <% include partials/_nav %>
   <div class="container">
     <div class="row">
-      <div class="col-8 col-md-6" style="background:#fefefe;">
+      <div class="col-12">
+        <h1><%=choices[0].poll_title%></h1>
+      </div>
+    </div>
+    <div class="row mb-5">
+      <div class="col-12">
+        <input id="voter_name" name="voter_name" type="text" placeholder="enter your name">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
         <div class="dd" id="nestable3">
           <ol class="dd-list">
             <% for (let i of choices) { %>
-
-            <li class="dd-item dd3-item" data-id="<%=i.choice_id%>" data-poll_id="<%=i.poll_id%>">
-              <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
-            </li>
+              <li class="dd-item dd3-item" data-id="<%=i.choice_id%>" data-poll_id="<%=i.poll_id%>">
+                <div class="dd-handle dd3-handle">Drag</div>
+                <div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
+              </li>
             <% } %>
           </ol>
         </div>
       </div>
     </div>
+    <div class="row mt-5">
+      <div class="col-12">
+        <button type="button" class="btn on-brand poll-submit">Vote</button>
+      </div>
+    </div>
   </div>
-  <button type="button" class="btn btn-primary poll-submit">Vote</button>
+  <% include partials/_footer %>
 
-  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-  <script type="text/javascript" src="/scripts/nestable.js"></script>
-  <script type="text/javascript" src="/scripts/app.js"></script>
-  <!-- <script type="text/javascript" src="/scripts/create_poll.js"></script> -->
+
   <script type="text/javascript">
     $(document).ready(function(){
       $('.dd').nestable({maxDepth:1});
@@ -54,7 +46,6 @@
       $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
     };
   </script>
-
 
 </body>
 </html>
