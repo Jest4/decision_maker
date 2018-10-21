@@ -24,28 +24,28 @@ function emailAdmin(poll_data) {
     // vote_link : vote_url,
     // result_link : results_url
 
-  let data = {
-    from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
-    to: poll_data.admin_email,
-    subject: `${poll_data.poll_name} Poll Created on iHangry`,
-    text: `Your poll has been created with the following URLs:
-    VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-    ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
-  };
+    let data = {
+      from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
+      to: poll_data.admin_email,
+      subject: `${poll_data.poll_name} Poll Created on iHangry`,
+      text: `Your poll has been created with the following URLs:
+      VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+    };
 
-  mailgun.messages().send(data, function (error, body) {
-    console.log(body);
-  });
-}
-
-function stringGen() {
-  let newString = "";
-  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < 8; i++) {
-    newString += possible.charAt(Math.floor(Math.random() * possible.length));
+    mailgun.messages().send(data, function (error, body) {
+      console.log(body);
+    });
   }
-  return newString;
-}
+
+  function stringGen() {
+    let newString = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < 8; i++) {
+      newString += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return newString;
+  }
 
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
@@ -84,18 +84,18 @@ app.post("/", (req, res) => {
 // console.log(req.body)
 let vote_url = stringGen()
 let results_url = stringGen()
-  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
-  .returning('poll_id').then(function(poll_id_val){
-    let choices = req.body.choice_title;
-    let descriptions = req.body.choice_desc;
-    let choiceArray = []
-    choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
-    knex('choices').insert(choiceArray)
-      .then(function(results) {console.log('inserted choice')});
-      });
-  console.log('votepage: localhost:8080/vote/' + vote_url)
-  console.log('resultpage: localhost:8080/results/' + results_url)
-  let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
+knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
+.returning('poll_id').then(function(poll_id_val){
+  let choices = req.body.choice_title;
+  let descriptions = req.body.choice_desc;
+  let choiceArray = []
+  choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
+  knex('choices').insert(choiceArray)
+  .then(function(results) {console.log('inserted choice')});
+});
+console.log('votepage: localhost:8080/vote/' + vote_url)
+console.log('resultpage: localhost:8080/results/' + results_url)
+let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
   // emailAdmin(poll_data)
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
@@ -131,17 +131,50 @@ app.get("/vote/:id", (req, res) => {
 app.post("/vote", (req, res) => {
 // voting should lead to
 let voting = []
-  for (var i = 0; i < req.body.data.length; i++) {
-   voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
-  }
+for (var i = 0; i < req.body.data.length; i++) {
+ voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
+}
   // console.log('VOTING', voting)
-    knex('votes').insert(voting)
-      .then(function(results) {console.log('inserted choice')});
+  knex('votes').insert(voting)
+  .then(function(results) {console.log('inserted choice')});
       // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
   res.redirect("/");
 });
+
+//shows results as they are tallied
+app.get("/admin/:id", (req, res) => {
+  let templateVars = {};
+
+  knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
+  .join('choices', {'votes.choice_id': 'choices.choice_id'})
+  .join('polls', {'votes.poll_id' : 'polls.poll_id'})
+  .where('polls.result_link' , req.params.id)
+  .groupBy('choice_name')
+  .orderByRaw('sum(vote_weight) desc')
+  .then(function(results) {
+    knex('votes').distinct('voter_name')
+    .join('polls', {'votes.poll_id' : 'polls.poll_id'})
+    .where('polls.result_link', req.params.id)
+    .select()
+    .then(function(res2) {
+      knex('polls').select('final_result_link')
+      .where('polls.result_link', req.params.id)
+      .then(function(res_link) {
+        templateVars.names = res2;
+        templateVars.title = 'results';
+        templateVars.choices = results;
+        templateVars.final_result_link = res_link[0].final_result_link;
+        res.render('admin', templateVars)
+      });
+    });
+  });
+
+//displays real-time poll results
+//allows you to choose criteria by which to display final tally
+});
+
 
 //shows results as they are tallied
 app.get("/results/:id", (req, res) => {
@@ -150,7 +183,7 @@ app.get("/results/:id", (req, res) => {
   knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
   .join('polls', {'votes.poll_id' : 'polls.poll_id'})
-  .where('polls.result_link' , req.params.id)
+  .where('polls.final_result_link' , req.params.id)
   .groupBy('choice_name')
   .orderByRaw('sum(vote_weight) desc')
   .then(function(results) {
@@ -158,7 +191,7 @@ app.get("/results/:id", (req, res) => {
 
     knex('votes').distinct('voter_name')
     .join('polls', {'votes.poll_id' : 'polls.poll_id'})
-    .where('polls.result_link', req.params.id)
+    .where('polls.final_result_link', req.params.id)
     .select()
     .then(function(res2) {
       templateVars.names = res2;
