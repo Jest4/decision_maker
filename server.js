@@ -18,21 +18,30 @@ const api_key = process.env.MAILGUN_KEY
 const DOMAIN = 'mg.ihangry.ca';
 const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-function emailAdmin(poll_data) {
+function emailAdmin(poll_data, mailtype) {
 //THIS IS SEED DATA, should be passed data, admin_email can be sourced from req.body of post, others from keygen vars
     // NEED TO ADJUST TO INCLUDE LINKS
     // vote_link : vote_url,
     // result_link : results_url
-
-  let data = {
-    from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
-    to: poll_data.admin_email,
-    subject: `${poll_data.poll_name} Poll Created on iHangry`,
-    text: `Your poll has been created with the following URLs:
-    VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-    ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
-  };
-
+  if (mailtype == "new") {
+    let data = {
+      from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
+      to: poll_data.admin_email,
+      subject: `${poll_data.poll_name} Poll Created on iHangry`,
+      text: `Your poll has been created with the following URLs:
+      VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+    };
+  } else if (mailtype == "new") {
+    let data = {
+      from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
+      to: poll_data.admin_email,
+      subject: `${poll_data.poll_name} Poll Created on iHangry`,
+      text: `Your poll has been created with the following URLs:
+      VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+    };
+  }
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
   });
