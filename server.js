@@ -38,6 +38,15 @@ function emailAdmin() {
   });
 }
 
+function stringGen() {
+  let newString = "";
+  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < 8; i++) {
+    newString += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return newString;
+}
+
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
 
@@ -71,6 +80,18 @@ app.get("/", (req, res) => {
 //receives and processes new poll submission
 app.post("/", (req, res) => {
 //receives and processes new poll submission
+console.log(req.body)
+let vote_url = stringGen()
+let results_url = stringGen()
+  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
+  .returning('poll_id').then(function(poll_id_val){
+    let choices = req.body.choice_title;
+    let descriptions = req.body.choice_desc;
+    let choiceArray = []
+    choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
+    knex('choices').insert(choiceArray)
+      .then(function(results) {console.log('inserted choice')});
+      });
   // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
 });
 
