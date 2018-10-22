@@ -30,7 +30,7 @@ function emailAdmin(poll_data, mailtype) {
       subject: `${poll_data.poll_name} Poll Created on iHangry`,
       text: `Your poll, "${poll_data.poll_name}" has been created with the following URLs:
       VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}`
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.admin_link}`
     };
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
@@ -42,7 +42,7 @@ function emailAdmin(poll_data, mailtype) {
       subject: `Vote submitted to ${poll_data.poll_name}`,
       text: `Someone has submitted a vote to your poll, ${poll_data.poll_name}!
       ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}
-      Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.final_result_link}`
+      Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.result_link}`
     };
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
@@ -110,7 +110,7 @@ let final_results_url = stringGen()
   console.log('resultpage: localhost:8080/results/' + results_url)
   let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
-  // emailAdmin(poll_data, "create")
+  emailAdmin(poll_data, "create")
   let templateVars = {}
   templateVars.poll_data = poll_data;
   templateVars.title = "iHANGRY vote";
@@ -159,7 +159,7 @@ let voting = []
         .then(function(results) {
           let poll_data = {poll_name: results[0].poll_title, admin_email: results[0].admin_email, admin_link: results[0].result_link, result_link: results[0].final_result_link}
           console.log("POLL DATA:", poll_data, "\n / POLL DATA")
-          // emailAdmin(poll_data, "vote");
+          emailAdmin(poll_data, "vote");
         })
       });
           res.redirect("http://localhost:8080/");
