@@ -28,7 +28,7 @@ let $choices = $('.choices_container');
 let $admin = $('.creator_email');
 let $pollname = $('.poll_title');
 let $button = $('#poll_form');
-
+let $email = $('.email_msg')
 
 
 
@@ -81,9 +81,9 @@ let $button = $('#poll_form');
 
       	
 
-      
+      	$form.hide();
+      	$email.show();
 
-      	$create.hide();
 
 	} else{
 		alert('Please enter your email and title of the poll!');
@@ -95,6 +95,7 @@ let $button = $('#poll_form');
 	$create.on('click', function(){	
 		$form.slideDown();
 		$form.show();
+		$email.hide();
 	});
 
 });
