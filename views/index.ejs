@@ -1,42 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
+<% include partials/_header %>
 
-	<head>
-		<% let page_title = "iHangry Home Page" %>
-		<title><%= page_title%></title>
-	</head>
-		  <% include partials/_header %>
-  <body>
-    <header>
-    </header>
-      <% include partials/_nav %>
-    <h4 class="email_msg" style='display: none'>Email has been sent to you!</h4>
-		<button class = 'create_poll'>Create Poll:</button>
-		<br>
-		<br>
-		<form class= 'poll_container' style="display: none" id="poll_form">
+<body>
 
-		<section class="choices_container">
-			<input class='creator_email' type="email" placeholder="Enter your email" required>
-		<input class='poll_title' type="text" placeholder="Enter Poll title." required>
-		<br>
+  <% include partials/_nav %>
 
-			<section class='choices_box'>
-				<input class='choice_title' type="text" required>
-				<label>Description</label>
-				<textarea class=choice_desc></textarea>
-				<button class="del_choice">Delete</button>
-			</section>
+  <div class="container">
 
-		</section>
+<div class="jumbotron intro mb-3">
+  <h1 class="display-4">Indecisive and Hungry?</h1>
+  <p class="lead">Studies have shown that having too many options makes people less happy. In a city with as many cuisines as there are cultures, the struggle is real. To those all too familiar with the pain of "I-dunno-what-do you-wanna-do": help is finally here.</p>
+  <hr class="my-4">
+  <p> ihangry is committed to the fight against decision paralysis, one group-dining experience at a time.</p>
+  <button type="button" class="create_poll btn on-brand">Create a Poll</button>
+</div>
 
+    <div class="row email_msg mb-3 mt-3" style="display: none;">
+      <div class="col-12">
+        <h4>We emailed you some info about your poll. Check it out.</h4>
+      </div>
+    </div>
 
-			<button class="add_choice">+</button>
-			<button id="submit_poll" class="submit_poll">Submit</button>
-		</form>
+    <form class='poll_container' style="display: none;" id="poll_form">
 
+      <section class="choices_container mt-4">
+
+        <h4>Step 1: Give it a name</h4>
+
+        <div class="row mb-4 mt-3">
+          <div class="col-12">
+            <input class='poll_title' type="text" placeholder=" Name your Poll" required>
+          </div>
+        </div>
+
+        <h4>Step 2: Add some options</h4>
+
+        <div class="row option pt-2 pb-1 pl-0 pr-0 mt-1 mb-1">
+          <div class="col-4">
+            <input class='choice_title' placeholder=" List an option" type="text" required>
+          </div>
+          <div class="col-5">
+            <input class='choice_desc' placeholder=" Describe this option" type="text" required>
+          </div>
+          <div class="col-2">
+            <button type="button" class="btn on-brand del_choice">Delete</button>
+          </div>
+          <div class="col-1">&nbsp;</div>
+        </div>
+
+      </section>
+
+      <div class="row mt-3 mb-4">
+        <div class="col-12">
+          <button type="button" class="btn on-brand add_choice">+ Add Option</button>
+        </div>
+      </div>
+
+      <h4>Step 3: Pop in your email</h4>
+
+      <div class="row mt-3 mb-4">
+        <div class="col-12">
+          <input class='creator_email' type="email" placeholder=" Enter your email" required>
+        </div>
+      </div>
+
+      <h4>Step 4: Share the poll and relax!</h4>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <button id="submit_poll" class="btn on-brand submit_poll">Submit</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
   <% include partials/_footer %>
 
-	</body>
+</body>
 </html>
 
