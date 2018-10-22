@@ -153,15 +153,15 @@ let voting = []
       .then(function(results) {
         knex('polls').select().where('poll_id' , results[0].poll_id)
         .then(function(results) {
-        let poll_data = {poll_name: results[0].poll_title, admin_email: results[0].admin_email, admin_link: results[0].result_link, result_link: results[0].final_result_link}
-        console.log("POLL DATA:", poll_data, "\n / POLL DATA")
-        // emailAdmin(poll_data, "vote");
+          let poll_data = {poll_name: results[0].poll_title, admin_email: results[0].admin_email, admin_link: results[0].result_link, result_link: results[0].final_result_link}
+          console.log("POLL DATA:", poll_data, "\n / POLL DATA")
+          // emailAdmin(poll_data, "vote");
         })
-        console.log('RESULTS', results , "\n END RESULTS")});
+      });
+          res.redirect("http://localhost:8080/");
       // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
-  res.redirect("/");
 });
 
 //shows results as they are tallied
