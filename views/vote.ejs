@@ -37,7 +37,7 @@
         <button type="button" class="btn on-brand poll-submit">Vote</button>
 
         <div id="success_vote" class="alert alert-warning alert-dismissible fade" role="alert">
-          <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+          <strong>Holy guacamole!</strong> Thanks for voting!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -62,6 +62,7 @@
       } else {
         $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
         $('#success_vote').addClass('show');
+        $('.poll-submit').hide()
         $('#success_vote').on('closed.bs.alert', function () {
           window.location.replace('/');
         });

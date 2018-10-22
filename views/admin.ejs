@@ -3,6 +3,7 @@
 <header>
   <% let page_title = "iHangry Results" %>
   <% include partials/_header %>
+  <% include partials/_nav %>
 </header>
 <body>
 
@@ -11,7 +12,7 @@ Your poll <%=title%>
 <% if (choices.length < 1) {%>
 has been created!
 <br>Share the voting link below with your friends!
-<% } else { console.log(choices) %>
+<% } else { %>
 <br>
 Get your bib ready, you eat here: <%=choices[0].choice_name%>
 
