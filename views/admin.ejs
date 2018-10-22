@@ -7,7 +7,12 @@
 <body>
 
   <section>
-
+Your poll <%=title%>
+<% if (choices.length < 1) {%>
+has been created!
+<br>Share the voting link below with your friends!
+<% } else { console.log(choices) %>
+<br>
 Get your bib ready, you eat here: <%=choices[0].choice_name%>
 
 <br>
@@ -29,15 +34,22 @@ Voters:
 <%=names[i].voter_name%><br>
 
 <%}%>
+<%}%>
 
 <br>
 <br>
 
-<a href="/final_results/<%= final_result_link %>">Tell your comrades:</a>
+<a href="/vote/<%= vote_link %>">Voting:</a>
 
 <script>
   let host = location.protocol+'//'+location.hostname+(location.port ? ':' +location.port: '');
-  document.write(host+"/final_results/<%=final_result_link%>");
+  document.write(host+"/vote/<%=vote_link%>");
+</script>
+<br>
+<a href="/results/<%= final_result_link %>">Final Results Page:</a>
+
+<script>
+  document.write(host+"/results/<%=final_result_link%>");
 </script>
 
 

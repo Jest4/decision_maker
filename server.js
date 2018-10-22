@@ -183,13 +183,14 @@ app.get("/admin/:id", (req, res) => {
     .where('polls.result_link', req.params.id)
     .select()
     .then(function(res2) {
-      knex('polls').select('final_result_link')
+      knex('polls').select('final_result_link', 'vote_link', 'poll_title')
       .where('polls.result_link', req.params.id)
       .then(function(res_link) {
         templateVars.names = res2;
-        templateVars.title = 'results';
+        templateVars.title = res_link[0].poll_title;
         templateVars.choices = results;
         templateVars.final_result_link = res_link[0].final_result_link;
+        templateVars.vote_link = res_link[0].vote_link;
         res.render('admin', templateVars)
       });
     });
