@@ -1,7 +1,17 @@
 <% include partials/_header %>
 <body>
   <% include partials/_nav %>
-        <% if (choices.length < 1) { %> THIS POLL DOES NOT EXIST! <% } else { %>
+    <% if (choices.length < 1) { %>
+  <div class="container">
+    <div class="row mb-3 mt-5">
+      <div class="col-12">
+        <h3><b>Doesn't look like anything to me.</b></h3>
+        <h4>THIS POLL DOES NOT EXIST! </h4>
+      </div>
+    </div>
+  </div>
+
+    <% } else { %>
   <div class="container">
     <div class="row">
       <div class="col-12">
