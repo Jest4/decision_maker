@@ -5,33 +5,39 @@
   <% include partials/_nav %>
 
   <div class="container">
-    <div class="row">
+
+    <div class="row mt-3 mb-3">
       <div class="col-12">
         <button type="button" class="create_poll btn on-brand">Create a Poll</button>
       </div>
     </div>
-    <div class="row email_msg" style="display: none;">
+
+    <div class="row email_msg mb-3 mt-3" style="display: none;">
       <div class="col-12">
-        <h4 >We emailed you some info about your poll. Check it out.</h4>
+        <h4>We emailed you some info about your poll. Check it out.</h4>
       </div>
     </div>
 
-    <form class= 'poll_container' style="display: none;" id="poll_form">
+    <form class='poll_container' style="display: none;" id="poll_form">
 
       <section class="choices_container">
 
-        <div class="row">
+        <h4>Step 1: Give it a name!</h4>
+
+        <div class="row mb-4 mt-3">
           <div class="col-12">
-            <input class='poll_title' type="text" placeholder="Enter Poll title." required>
+            <input class='poll_title' type="text" placeholder=" Name your Poll" required>
           </div>
         </div>
 
-        <div class="row border p-1 mt-1 mb-1">
+        <h4>Step 2: Add some options!</h4>
+
+        <div class="row border pt-2 pb-1 pl-0 pr-0 mt-1 mb-1">
           <div class="col-5">
-            <input class='choice_title' placeholder="Name an option" type="text" required>
+            <input class='choice_title' placeholder=" List an option" type="text" required>
           </div>
           <div class="col-5">
-            <input class='choice_desc' placeholder="Option description" type="text" required>
+            <input class='choice_desc' placeholder=" Option description" type="text" required>
           </div>
           <div class="col-2">
             <button type="button" class="btn on-brand del_choice">Delete</button>
@@ -40,19 +46,23 @@
 
       </section>
 
-      <div class="row">
+      <div class="row mt-3 mb-4">
         <div class="col-12">
-          <button type="button" class="btn on-brand add_choice">Add Option</button>
+          <button type="button" class="btn on-brand add_choice">+ Add Option</button>
         </div>
       </div>
 
-      <div class="row">
+      <h4>Step 3: Pop in your email...</h4>
+
+      <div class="row mt-3 mb-4">
         <div class="col-12">
-          <input class='creator_email' type="email" placeholder="Enter your email" required>
+          <input class='creator_email' type="email" placeholder=" Enter your email" required>
         </div>
       </div>
 
-      <div class="row">
+      <h4>Step-fooled you: boom you're done</h4>
+
+      <div class="row mt-3">
         <div class="col-12">
           <button id="submit_poll" class="btn on-brand submit_poll">Submit</button>
         </div>

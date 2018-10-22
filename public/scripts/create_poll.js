@@ -1,19 +1,17 @@
-
-
-function addChoices(){
-  return	`
-        <div class="row border p-1 mt-1 mb-1">
+let addChoices = function() {
+  return	$(`
+        <div class="row border pt-1 pb-1 pl-0 pr-0 mt-1 mb-1">
           <div class="col-5">
-            <input class='choice_title' placeholder="Name an option" type="text" required>
+            <input class='choice_title' placeholder=" List an option" type="text" required>
           </div>
           <div class="col-5">
-            <input class='choice_desc' placeholder="Option description" type="text" required>
+            <input class='choice_desc' placeholder=" Option description" type="text" required>
           </div>
           <div class="col-2">
             <button type="button" class="btn on-brand del_choice">Delete</button>
           </div>
         </div>
-  `
+  `)
 }
 
 // function addChoices(){
@@ -47,17 +45,17 @@ let $pollname = $('.poll_title');
 let $button = $('#poll_form');
 let $email = $('.email_msg')
 
-
-
-
 $(add).click(function(){
   event.preventDefault();
-  $choices.append(addChoices());
-
+  let newOption = addChoices();
+  $choices.append(newOption);
+  newOption.find('.del_choice').click(function(){
+    $(this).closest('.row').remove();
+  });
 });
 
-$(del).click(function() {
- $(this).parent().remove();
+$(del).click(function(){
+  $(this).closest('.row').remove();
 });
 
 $button.submit(function (event) {
