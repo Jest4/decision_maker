@@ -123,11 +123,11 @@ app.get("/list", (req, res) => {
 
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
-app.get("/poll/:id", (req, res) => {
+// app.get("/poll/:id", (req, res) => {
   // res.render("/views/poll", {title: "Create Poll"})
   //test id: 1abcdefg
   //test url: http://localhost:8080/poll/1abcdefg
-});
+// });
 
 
 //generates poll for voters to fill out
@@ -237,10 +237,18 @@ app.post("/results/:id", (req, res) => {
   //redirects to final results afterwards
 });
 
-app.get("/final_results/:id", (req, res) => {
+app.get("/about", (req, res) => {
+  res.render("about", {title: "About iHangry"});
+});
+
+app.get("/contact", (req, res) => {
+  res.render("contact", {title: "About iHangry"});
+});
+
+// app.get("/final_results/:id", (req, res) => {
   // {title: "Create Poll"} --don't forget!
   //displays where you will eat!
-});
+// });
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
