@@ -130,7 +130,7 @@ app.get("/vote/:id", (req, res) => {
 //takes in poll data and sends a submission notification form
 app.post("/vote", (req, res) => {
 // voting should lead to
-let voting = []
+let voting = [];
 for (var i = 0; i < req.body.data.length; i++) {
  voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
 }
@@ -166,7 +166,7 @@ app.get("/admin/:id", (req, res) => {
         templateVars.title = 'results';
         templateVars.choices = results;
         templateVars.final_result_link = res_link[0].final_result_link;
-        res.render('admin', templateVars)
+        res.render('admin', templateVars, {title: 'Admin Results'})
       });
     });
   });
@@ -177,31 +177,29 @@ app.get("/admin/:id", (req, res) => {
 
 
 //shows results as they are tallied
-app.get("/results/:id", (req, res) => {
+app.get("/final_results/:id", (req, res) => {
   let templateVars = {};
-  // knex('polls').select('poll_id').where('result_link', req.params.id).then(function(results) {templateVars.poll_id = results;})
+
   knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
   .join('polls', {'votes.poll_id' : 'polls.poll_id'})
-  .where('polls.final_result_link' , req.params.id)
+  .where('polls.final_result_link', req.params.id)
   .groupBy('choice_name')
   .orderByRaw('sum(vote_weight) desc')
+  .limit(1)
   .then(function(results) {
-    templateVars.choices = results;
 
     knex('votes').distinct('voter_name')
     .join('polls', {'votes.poll_id' : 'polls.poll_id'})
     .where('polls.final_result_link', req.params.id)
     .select()
     .then(function(res2) {
+      templateVars.choices = results;
       templateVars.names = res2;
-      templateVars.title = 'results';
-      res.render('results', templateVars)
+      templateVars.title = 'final_results';
+      res.render('final_results', templateVars)
     });
   });
-
-//displays real-time poll results
-//allows you to choose criteria by which to display final tally
 });
 
 //
