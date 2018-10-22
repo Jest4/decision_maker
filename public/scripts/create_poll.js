@@ -79,13 +79,19 @@ let $pollname = $('.poll_title');
 		console.log('data sent');
       	});
 
+      	
+
+      
+
+      	$create.hide();
+
 	} else{
 		alert('Please enter your email and title of the poll!');
 	}
 		
 	});
 		
-	$('body').on('click', function(){	
+	$create.on('click', function(){	
 		$form.slideDown();
 		$form.show();
 	});

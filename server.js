@@ -17,7 +17,8 @@ const knexLogger  = require('knex-logger');
 const api_key = process.env.MAILGUN_KEY
 const DOMAIN = 'mg.ihangry.ca';
 const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
-var pollData ={};
+
+
 function emailAdmin() {
 //THIS IS SEED DATA, should be passed data, admin_email can be sourced from req.body of post, others from keygen vars
     // NEED TO ADJUST TO INCLUDE LINKS
@@ -80,10 +81,8 @@ app.get("/", (req, res) => {
 //receives and processes new poll submission
 app.post("/", (req, res) => {
 //receives and processes new poll submission
-
-// console.log(req.body)
-let vote_url = stringGen()
-let results_url = stringGen()
+  let vote_url = stringGen()
+ let results_url = stringGen()
 
   knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
   .returning('poll_id').then(function(poll_id_val){
@@ -104,11 +103,6 @@ let results_url = stringGen()
 
   let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   
-  pollData.poll_data = poll_data;
-   // pollData.poll_name = poll_data.poll_name;
-   // pollData.admin_email = poll_data.admin_email;
-   // pollData.vote_link = poll_data.vote_link;
-   // pollData.result_link = poll_data.result_link
   // EMAIL ADMIN WORKS! ENABLE BELOW
   // emailAdmin(poll_data)
 
@@ -124,19 +118,19 @@ app.get("/list", (req, res) => {
 //displays completed poll in the form that others can see it
 //features two action links, one to share results and one to check out results
 app.get("/poll/:id", (req, res) => {
-  
-  // knex('polls').select('poll_name').where('result_link',req.params.id).then((name)=>{
-  //   pollData['poll_name'] = name;
-  // });
-  // knex('polls').select('vote_link').where('result_link',req.params.id).then((vlink)=>{
-  //   pollData['vote_link'] = vlink;
-  // });
-  //  knex('polls').select('result_link').where('result_link',req.params.id).then((rlink)=>{
-  //   pollData['result_link'] = rlink;
-  // });
+  let pollData ={};
 
+  knex('polls').select('poll_title').where('result_link',req.params.id).then((name)=>{
+    pollData.poll_name = name;
+  });
+  knex('polls').select('vote_link').where('result_link',req.params.id).then((vlink)=>{
+    pollData.vote_link = vlink;
+  });
+   knex('polls').select('result_link').where('result_link',req.params.id).then((rlink)=>{
+    pollData.result_link = rlink;
+  });
 
-  res.render("poll", pollData)
+  res.render("poll",pollData)
   //test id: 1abcdefg
   //test url: http://localhost:8080/poll/1abcdefg
 });
