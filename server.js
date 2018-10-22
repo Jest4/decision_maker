@@ -176,7 +176,7 @@ app.get("/admin/:id", (req, res) => {
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
   .join('polls', {'votes.poll_id' : 'polls.poll_id'})
   .where('polls.result_link' , req.params.id)
-  .groupBy('choice_name')
+  .groupBy('choice_name', 'choices.choice_id')
   .orderByRaw('sum(vote_weight) desc')
   .orderBy('choices.choice_id')
   .then(function(results) {
@@ -204,10 +204,10 @@ app.get("/admin/:id", (req, res) => {
 
 
 //shows results as they are tallied
-app.get("/final_results/:id", (req, res) => {
+app.get("/results/:id", (req, res) => {
   let templateVars = {};
 
-  knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
+    knex('votes').select('choice_name', knex.raw('SUM(vote_weight)'))
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
   .join('polls', {'votes.poll_id' : 'polls.poll_id'})
   .where('polls.final_result_link', req.params.id)
