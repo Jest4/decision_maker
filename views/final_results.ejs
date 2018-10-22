@@ -1,28 +1,43 @@
 <% include partials/_header %>
+
 <body>
+
   <% include partials/_nav %>
-<% if (choices.length < 1) { %> COME BACK WHEN THERE ARE VOTES! <% } else { %>
-<section>
-<container>
-<br>
-<br>
-Fellow Friends:
-<br>
-<%for (let i=0; i < names.length; i++) { %>
+  <div class="container">
+    <% if (choices.length < 1) { %>
 
-  <%=names[i].voter_name%><br>
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        COME BACK WHEN THERE ARE VOTES!
+      </div>
+    </div>
 
-    <%}%>
+    <% } else { %>
 
-By popular demand, your feeding will be:
-<h1><%=choices[0]['choice_name']%></h1>
+    <div class="row mb-2 mt-4">
+      <div class="col-12">
+        By popular demand, your feeding will be:
+        <h1 class="mt-2"><%=choices[0]['choice_name']%></h1>
+      </div>
+    </div>
 
-<br>
-Get your bibs ready.
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <h4>Fellow Friends:</h4>
+          <%for (let i=0; i < names.length; i++) { %>
+            <%=names[i].voter_name%><br>
+          <%}%>
+      </div>
+    </div>
 
-</section>
-</container>
-<% } %>
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        Get your bibs ready.
+      </div>
+    </div>
+
+    <% } %>
+  </div>
   <% include partials/_footer %>
 </body>
 </html>

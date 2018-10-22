@@ -1,64 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<header>
-  <% let page_title = "iHangry Results" %>
-  <% include partials/_header %>
-  <% include partials/_nav %>
-</header>
+<% include partials/_header %>
+
 <body>
 
-  <section>
-Your poll <%=title%>
-<% if (choices.length < 1) {%>
-has been created!
-<br>Share the voting link below with your friends!
-<% } else { %>
-<br>
-Get your bib ready, you eat here: <%=choices[0].choice_name%>
+  <% include partials/_nav %>
 
+  <div class="container">
 
-    <br>
-    <br>
+    <% if (choices.length < 1) {%>
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <h3>Your poll, <%=title%>, has been created.</h3>
+        Share the voting link below with your friends and get ready to get fed.
+      </div>
+    </div>
 
-    <%for (let i=0; i < choices.length; i++) { %>
+    <% } else { %>
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <h3><%=title%></h3>
+        Get your bib ready, you eat here: <b><%=choices[0].choice_name%></b>
+      </div>
+    </div>
 
-    <%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
+    <h4>Points:</h4>
+
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <%for (let i=0; i < choices.length; i++) { %>
+        <%=choices[i].choice_name%> points: <span class="orange"><%=choices[i].sum%></span><br>
+        <%}%>
+      </div>
+    </div>
+
+    <h4>Voters:</h4>
+
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <%for (let i=0; i < names.length; i++) { %>
+
+        <%=names[i].voter_name%><br>
+
+        <%}%>
+      </div>
+    </div>
 
     <%}%>
 
-    <br>
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <a href="/vote/<%= vote_link %>">Voting:</a>
 
-    Voters:
-    <br>
+        <script>
+          let host = location.protocol+'//'+location.hostname+(location.port ? ':' +location.port: '');
+          document.write(host+"/vote/<%=vote_link%>");
+        </script>
+        <br>
+        <a href="/results/<%= final_result_link %>">Final Results Page:</a>
 
-    <%for (let i=0; i < names.length; i++) { %>
+        <script>
+          document.write(host+"/results/<%=final_result_link%>");
+        </script>
+      </div>
+    </div>
 
-    <%=names[i].voter_name%><br>
-
-<%}%>
-<%}%>
-
-
-    <br>
-    <br>
-
-<a href="/vote/<%= vote_link %>">Voting:</a>
-
-<script>
-  let host = location.protocol+'//'+location.hostname+(location.port ? ':' +location.port: '');
-  document.write(host+"/vote/<%=vote_link%>");
-</script>
-<br>
-<a href="/results/<%= final_result_link %>">Final Results Page:</a>
-
-<script>
-  document.write(host+"/results/<%=final_result_link%>");
-</script>
-
-
-
-  </section>
+  </div>
   <% include partials/_footer %>
 
 </body>
-
+</html>

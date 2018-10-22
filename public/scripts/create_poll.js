@@ -15,16 +15,6 @@ let addChoices = function() {
   `)
 }
 
-// function addChoices(){
-//   return  `
-//   <section class='choices_box'>
-//     <input class='choice_title' type="text" required>
-//     <label>Description</label>
-//     <textarea class='choice_desc'></textarea>
-//     <button class="del_choice">Delete</button>
-//   </section>  `
-// }
-
 $(document).ready(function() {
 	let poll_data = {
    choice_title:[],

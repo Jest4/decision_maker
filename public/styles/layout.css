@@ -36,6 +36,10 @@ body h1 {
   border-radius: .25rem;
 }
 
+.orange {
+  color: #ff9800;
+}
+
 input[type="text"]:focus, input[type="email"]:focus{
   outline-color: #9c27b0 !important;
 }
