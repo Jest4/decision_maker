@@ -1,7 +1,7 @@
 let addChoices = function() {
   return	$(`
-        <div class="row border pt-1 pb-1 pl-0 pr-0 mt-1 mb-1">
-          <div class="col-5">
+        <div class="row option pt-2 pb-1 pl-0 pr-0 mt-1 mb-1">
+          <div class="col-4">
             <input class='choice_title' placeholder=" List an option" type="text" required>
           </div>
           <div class="col-5">
@@ -10,6 +10,7 @@ let addChoices = function() {
           <div class="col-2">
             <button type="button" class="btn on-brand del_choice">Delete</button>
           </div>
+          <div class="col-1">&nbsp;</div>
         </div>
   `)
 }
@@ -30,8 +31,7 @@ $(document).ready(function() {
    choice_desc:[]
  }
 
-//Diana if you change any of these class names when you work on index.ejs,
-//please change them here in these let variables
+let $intro = $('.intro');
 let add = '.add_choice';
 let del = '.del_choice';
 let $create = $('.create_poll');
@@ -104,7 +104,8 @@ $button.submit(function (event) {
 
 
 $create.on('click', function(){
-  $form.slideDown();
+  $intro.slideUp('slow');
+  $form.slideDown('slow');
   $form.show();
   $email.hide();
 });

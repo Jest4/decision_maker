@@ -6,11 +6,13 @@
 
   <div class="container">
 
-    <div class="row mt-3 mb-3">
-      <div class="col-12">
-        <button type="button" class="create_poll btn on-brand">Create a Poll</button>
-      </div>
-    </div>
+<div class="jumbotron intro mb-3">
+  <h1 class="display-4">Hello, world!</h1>
+  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+  <hr class="my-4">
+  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <button type="button" class="create_poll btn on-brand">Create a Poll</button>
+</div>
 
     <div class="row email_msg mb-3 mt-3" style="display: none;">
       <div class="col-12">
@@ -20,7 +22,7 @@
 
     <form class='poll_container' style="display: none;" id="poll_form">
 
-      <section class="choices_container">
+      <section class="choices_container mt-4">
 
         <h4>Step 1: Give it a name!</h4>
 
@@ -32,8 +34,8 @@
 
         <h4>Step 2: Add some options!</h4>
 
-        <div class="row border pt-2 pb-1 pl-0 pr-0 mt-1 mb-1">
-          <div class="col-5">
+        <div class="row option pt-2 pb-1 pl-0 pr-0 mt-1 mb-1">
+          <div class="col-4">
             <input class='choice_title' placeholder=" List an option" type="text" required>
           </div>
           <div class="col-5">
@@ -42,6 +44,7 @@
           <div class="col-2">
             <button type="button" class="btn on-brand del_choice">Delete</button>
           </div>
+          <div class="col-1">&nbsp;</div>
         </div>
 
       </section>
