@@ -1,6 +1,7 @@
 <% include partials/_header %>
 <body>
   <% include partials/_nav %>
+        <% if (choices.length < 1) { %> THIS POLL DOES NOT EXIST! <% } else { %>
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -43,6 +44,7 @@
           </button>
         </div>
 
+  <% } %>
       </div>
     </div>
   </div>
@@ -71,6 +73,5 @@
 
 
   </script>
-
 </body>
 </html>

@@ -33,13 +33,13 @@ let $email = $('.email_msg')
 
 
 
-	$('body').on('click', add, function(){
-
+	$(add).click(function(){
+    event.preventDefault();
 		$choices.append(addChoices());
 
 	});
 
-	$('body').on('click', del , function() {
+	$(del).click(function() {
 	    $(this).parent().remove();
 	});
 
