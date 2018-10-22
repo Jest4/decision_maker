@@ -2,7 +2,6 @@ exports.seed = function(knex, Promise) {
   return knex('votes').del()
     .then(function () {
       return Promise.all([
-
         knex('votes').insert({voter_name: 'NAME1', choice_id: 10001, poll_id: 10001, vote_weight: 5}),
         knex('votes').insert({voter_name: 'NAME1', choice_id: 10002, poll_id: 10001, vote_weight: 4}),
         knex('votes').insert({voter_name: 'NAME1', choice_id: 10003, poll_id: 10001, vote_weight: 3}),

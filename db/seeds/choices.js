@@ -3,8 +3,6 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       return Promise.all([
 
-
-
         knex('choices').insert({choice_id: 10001, choice_name:'Applebees', choice_description: 'lolwut', poll_id: 10001}),
         knex('choices').insert({choice_id: 10002, choice_name:'Mickey Dees', choice_description: 'dumpster diving', poll_id: 10001}),
         knex('choices').insert({choice_id: 10003, choice_name:'Pizzaiolo', choice_description: 'big pies', poll_id: 10001}),
@@ -33,7 +31,6 @@ exports.seed = function(knex, Promise) {
         knex('choices').insert({choice_id: 10026, choice_name:'Burrito Boyz', choice_description: 'gotta get that taco fix', poll_id: 10005}),
         knex('choices').insert({choice_id: 10027, choice_name:'Timmys', choice_description: 'i already thought i bottomed out', poll_id: 10005}),
         knex('choices').insert({choice_id: 10028, choice_name:'A dubs', choice_description: 'go beyond', poll_id: 10005})
-
 
 
 

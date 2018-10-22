@@ -15,7 +15,7 @@ $(document).ready(function() {
 	choice_desc:[]
 }
 
-//Diana if you change any of these class names when you work on index.ejs, 
+//Diana if you change any of these class names when you work on index.ejs,
 //please change them here in these let variables
 let add = '.add_choice';
 let del = '.del_choice';
@@ -27,13 +27,13 @@ let submit = '.submit_poll';
 let $choices = $('.choices_container');
 let $admin = $('.creator_email');
 let $pollname = $('.poll_title');
-
+let $button = $('#poll_form');
 
 
 
 
 	$('body').on('click', add, function(){
-		
+
 		$choices.append(addChoices());
 
 	});
@@ -42,7 +42,7 @@ let $pollname = $('.poll_title');
 	    $(this).parent().remove();
 	});
 
-	$('body').on('click',submit, function (event) {
+  $button.submit(function (event) {
 		event.preventDefault();
 		$(this).filter('')
 	if ($admin.val() && $pollname.val() && $(title).val()){
@@ -56,27 +56,27 @@ let $pollname = $('.poll_title');
 		}
 
 		$(title).each(function( index ) {
-		
-			console.log( index + ": " + $( this ).val())
+
+			// console.log( index + ": " + $( this ).val())
   			poll_data.choice_title.push($( this ).val());
-  			console.log(poll_data.choice_title);
-		
-  		
+  			// console.log(poll_data.choice_title);
+
+
   		});
 
   		$(desc).each(function( index ) {
-  		
-  			console.log( index + ": " + $( this ).val() )
+
+  			// console.log( index + ": " + $( this ).val() )
   			poll_data.choice_desc.push($( this ).val());
-  			console.log(poll_data.choice_desc)
-  	
-  		
-  		});  		
+  			// console.log(poll_data.choice_desc)
+
+
+  		});
   		console.log(poll_data);
-  		
+
   		  $.post("/", poll_data)
       	.then(function() {
-		console.log('data sent');
+      		console.log('data sent');
       	});
 
       	
@@ -88,8 +88,9 @@ let $pollname = $('.poll_title');
 	} else{
 		alert('Please enter your email and title of the poll!');
 	}
-		
+
 	});
+
 		
 	$create.on('click', function(){	
 		$form.slideDown();
