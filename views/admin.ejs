@@ -15,29 +15,31 @@ has been created!
 <br>
 Get your bib ready, you eat here: <%=choices[0].choice_name%>
 
-<br>
-<br>
 
-<%for (let i=0; i < choices.length; i++) { %>
+    <br>
+    <br>
 
-<%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
+    <%for (let i=0; i < choices.length; i++) { %>
+
+    <%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
+
+    <%}%>
+
+    <br>
+
+    Voters:
+    <br>
+
+    <%for (let i=0; i < names.length; i++) { %>
+
+    <%=names[i].voter_name%><br>
 
 <%}%>
-
-<br>
-
-Voters:
-<br>
-
-<%for (let i=0; i < names.length; i++) { %>
-
-<%=names[i].voter_name%><br>
-
-<%}%>
 <%}%>
 
-<br>
-<br>
+
+    <br>
+    <br>
 
 <a href="/vote/<%= vote_link %>">Voting:</a>
 
@@ -51,6 +53,7 @@ Voters:
 <script>
   document.write(host+"/results/<%=final_result_link%>");
 </script>
+
 
 
   </section>
