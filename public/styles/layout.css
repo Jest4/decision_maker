@@ -25,3 +25,8 @@ body h1 {
 .navbar-toggler:focus {
   outline-color: #9c27b0;
 }
+
+.border {
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+}

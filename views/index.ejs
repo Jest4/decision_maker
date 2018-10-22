@@ -1,42 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+<% include partials/_header %>
 
-	<head>
-		<% let page_title = "iHangry Home Page" %>
-		<title><%= page_title%></title>
-	</head>
-		  <% include partials/_header %>
-  <body>
-    <header>
-    </header>
-      <% include partials/_nav %>
-    <h4 class="email_msg" style='display: none'>Email has been sent to you!</h4>
-		<button class = 'create_poll'>Create Poll:</button>
-		<br>
-		<br>
-		<form class= 'poll_container' style="display: none" id="poll_form">
+<body>
 
-		<section class="choices_container">
-			<input class='creator_email' type="email" placeholder="Enter your email" required>
-		<input class='poll_title' type="text" placeholder="Enter Poll title." required>
-		<br>
+  <% include partials/_nav %>
 
-			<section class='choices_box'>
-				<input class='choice_title' type="text" required>
-				<label>Description</label>
-				<textarea class=choice_desc></textarea>
-				<button class="del_choice">Delete</button>
-			</section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <button type="button" class="create_poll btn on-brand">Create a Poll</button>
+      </div>
+    </div>
+    <div class="row email_msg" style="display: none;">
+      <div class="col-12">
+        <h4 >We emailed you some info about your poll. Check it out.</h4>
+      </div>
+    </div>
 
-		</section>
+    <form class= 'poll_container' style="display: none;" id="poll_form">
 
+      <section class="choices_container">
 
-			<button class="add_choice">+</button>
-			<button id="submit_poll" class="submit_poll">Submit</button>
-		</form>
+        <div class="row">
+          <div class="col-12">
+            <input class='poll_title' type="text" placeholder="Enter Poll title." required>
+          </div>
+        </div>
 
+        <div class="row border p-1 mt-1 mb-1">
+          <div class="col-5">
+            <input class='choice_title' placeholder="Name an option" type="text" required>
+          </div>
+          <div class="col-5">
+            <input class='choice_desc' placeholder="Option description" type="text" required>
+          </div>
+          <div class="col-2">
+            <button type="button" class="btn on-brand del_choice">Delete</button>
+          </div>
+        </div>
+
+      </section>
+
+      <div class="row">
+        <div class="col-12">
+          <button type="button" class="btn on-brand add_choice">Add Option</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <input class='creator_email' type="email" placeholder="Enter your email" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <button id="submit_poll" class="btn on-brand submit_poll">Submit</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
   <% include partials/_footer %>
 
-	</body>
+</body>
 </html>
 
