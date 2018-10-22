@@ -111,7 +111,10 @@ let final_results_url = stringGen()
   let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
   // emailAdmin(poll_data, "create")
-  // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
+  let templateVars = {}
+  templateVars.poll_data = poll_data;
+  templateVars.title = "iHANGRY vote";
+  res.send(results_url);
 });
 
 app.get("/list", (req, res) => {

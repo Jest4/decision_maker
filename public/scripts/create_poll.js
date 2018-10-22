@@ -75,8 +75,9 @@ let $button = $('#poll_form');
   		console.log(poll_data);
 
   		  $.post("/", poll_data)
-      	.then(function() {
-      		console.log('data sent');
+      	.then(function(results) {
+          url = `/admin/${results}`;
+          $( location ).attr("href", url)
       	});
 
 	} else{
