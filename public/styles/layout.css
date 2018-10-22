@@ -40,6 +40,10 @@ body h1 {
   color: #ff9800;
 }
 
+.jumbotron {
+  background-color: #1201150a;
+}
+
 input[type="text"]:focus, input[type="email"]:focus{
   outline-color: #9c27b0 !important;
 }

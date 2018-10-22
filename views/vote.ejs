@@ -8,10 +8,11 @@
         <h1><%=choices[0].poll_title%></h1>
       </div>
     </div>
+
     <div class="row mb-2">
       <div class="col-12">
-        <input id="voter_name" name="voter_name" type="text" placeholder="enter your name">
-        <div id="missing_name" class="mb-0 alert alert-warning alert-dismissible fade" role="alert">
+        <input class="mb-2" id="voter_name" name="voter_name" type="text" placeholder=" Enter your name">
+        <div id="missing_name" class="mb-0 alert alert-warning alert-dismissible" style="display: none;" role="alert">
           It's always better to know your dinner companions by name. What's your name?
           <button type="button" class="hide" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -33,7 +34,7 @@
         </div>
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3">
       <div class="col-12">
         <button type="button" class="btn on-brand poll-submit">Vote</button>
 
@@ -50,7 +51,6 @@
   </div>
   <% include partials/_footer %>
 
-
   <script type="text/javascript">
     $(document).ready(function(){
       $('.dd').nestable({maxDepth:1});
@@ -59,7 +59,7 @@
 
     let updateOutput = function() {
       if ( !$('#voter_name').val() ) {
-        $('#missing_name').addClass('show');
+        $('#missing_name').show();
         return;
       } else {
         $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
@@ -70,7 +70,6 @@
         });
       }
     };
-
 
   </script>
 </body>
