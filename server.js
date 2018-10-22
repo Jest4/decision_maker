@@ -18,25 +18,37 @@ const api_key = process.env.MAILGUN_KEY
 const DOMAIN = 'mg.ihangry.ca';
 const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-function emailAdmin(poll_data) {
+function emailAdmin(poll_data, mailtype) {
 //THIS IS SEED DATA, should be passed data, admin_email can be sourced from req.body of post, others from keygen vars
     // NEED TO ADJUST TO INCLUDE LINKS
     // vote_link : vote_url,
     // result_link : results_url
-
+  if (mailtype == "create") {
     let data = {
       from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
       to: poll_data.admin_email,
       subject: `${poll_data.poll_name} Poll Created on iHangry`,
-      text: `Your poll has been created with the following URLs:
+      text: `Your poll, "${poll_data.poll_name}" has been created with the following URLs:
       VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/results/${poll_data.result_link}`
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}`
     };
-
-    mailgun.messages().send(data, function (error, body) {
-      console.log(body);
-    });
+  mailgun.messages().send(data, function (error, body) {
+    console.log(body);
+  });
+  } else if (mailtype == "vote") {
+    let data = {
+      from: 'iHangry PollMaster<postmaster@mg.ihangry.ca>',
+      to: poll_data.admin_email,
+      subject: `Vote submitted to ${poll_data.poll_name}`,
+      text: `Someone has submitted a vote to your poll, ${poll_data.poll_name}!
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}
+      Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.final_result_link}`
+    };
+  mailgun.messages().send(data, function (error, body) {
+    console.log(body);
+  });
   }
+}
 
   function stringGen() {
     let newString = "";
@@ -84,21 +96,25 @@ app.post("/", (req, res) => {
 // console.log(req.body)
 let vote_url = stringGen()
 let results_url = stringGen()
-knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url})
-.returning('poll_id').then(function(poll_id_val){
-  let choices = req.body.choice_title;
-  let descriptions = req.body.choice_desc;
-  let choiceArray = []
-  choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
-  knex('choices').insert(choiceArray)
-  .then(function(results) {console.log('inserted choice')});
-});
-console.log('votepage: localhost:8080/vote/' + vote_url)
-console.log('resultpage: localhost:8080/results/' + results_url)
-let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
+let final_results_url = stringGen()
+  knex('polls').insert({poll_title: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url, final_result_link: final_results_url})
+  .returning('poll_id').then(function(poll_id_val){
+    let choices = req.body.choice_title;
+    let descriptions = req.body.choice_desc;
+    let choiceArray = []
+    choices.forEach((choice, index) => {choiceArray.push({choice_name: choice, choice_description: descriptions[index], poll_id: poll_id_val[0]})});
+    knex('choices').insert(choiceArray)
+      .then(function(results) {console.log('inserted choice')});
+      });
+  console.log('votepage: localhost:8080/vote/' + vote_url)
+  console.log('resultpage: localhost:8080/results/' + results_url)
+  let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
-  // emailAdmin(poll_data)
-  // res.redirect("/poll" -- "displays form, displays 2 links: votes page and results page");
+  // emailAdmin(poll_data, "create")
+  let templateVars = {}
+  templateVars.poll_data = poll_data;
+  templateVars.title = "iHANGRY vote";
+  res.send(results_url);
 });
 
 app.get("/list", (req, res) => {
@@ -131,16 +147,24 @@ app.get("/vote/:id", (req, res) => {
 app.post("/vote", (req, res) => {
 // voting should lead to
 let voting = []
-for (var i = 0; i < req.body.data.length; i++) {
- voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
-}
+  for (var i = 0; i < req.body.data.length; i++) {
+    voting.push({'voter_name': req.body.voter_name, 'choice_id': req.body.data[i].id, 'vote_weight': (req.body.data.length)-i, 'poll_id': req.body.data[i].poll_id })
+  }
   // console.log('VOTING', voting)
-  knex('votes').insert(voting)
-  .then(function(results) {console.log('inserted choice')});
+    knex('votes').insert(voting)
+      .returning("*")
+      .then(function(results) {
+        knex('polls').select().where('poll_id' , results[0].poll_id)
+        .then(function(results) {
+          let poll_data = {poll_name: results[0].poll_title, admin_email: results[0].admin_email, admin_link: results[0].result_link, result_link: results[0].final_result_link}
+          console.log("POLL DATA:", poll_data, "\n / POLL DATA")
+          // emailAdmin(poll_data, "vote");
+        })
+      });
+          res.redirect("http://localhost:8080/");
       // });
   // TODO: figure out the redirection
   // figure out a thank you pop up message
-  res.redirect("/");
 });
 
 //shows results as they are tallied

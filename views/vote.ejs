@@ -42,8 +42,12 @@
     });
 
     let updateOutput = function() {
+      if ( !$('#voter_name').val() ) {
+      window.alert("Please enter a name before submitting")
+      } else {
       // TODO: add descriptions to data passed to server
       $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
+      }
     };
   </script>
 
