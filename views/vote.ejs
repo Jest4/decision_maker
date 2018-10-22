@@ -17,10 +17,10 @@
         <div class="dd" id="nestable3">
           <ol class="dd-list">
             <% for (let i of choices) { %>
-              <li class="dd-item dd3-item" data-id="<%=i.choice_id%>" data-poll_id="<%=i.poll_id%>">
-                <div class="dd-handle dd3-handle">Drag</div>
-                <div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
-              </li>
+            <li class="dd-item dd3-item" data-id="<%=i.choice_id%>" data-poll_id="<%=i.poll_id%>">
+              <div class="dd-handle dd3-handle">Drag</div>
+              <div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
+            </li>
             <% } %>
           </ol>
         </div>
@@ -29,6 +29,13 @@
     <div class="row mt-5">
       <div class="col-12">
         <button type="button" class="btn on-brand poll-submit">Vote</button>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -42,10 +49,18 @@
     });
 
     let updateOutput = function() {
-      // TODO: add descriptions to data passed to server
+      if ( !$('#voter_name').val() ) {
+        window.alert("Please enter a name before submitting")
+      } else {
       $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
-    };
-  </script>
+      $('#myAlert').on('closed.bs.alert', function () {
+        window.location.replace('/');
+      });
+    }
+  };
+
+
+</script>
 
 </body>
 </html>

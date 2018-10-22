@@ -153,6 +153,7 @@ app.get("/admin/:id", (req, res) => {
   .where('polls.result_link' , req.params.id)
   .groupBy('choice_name')
   .orderByRaw('sum(vote_weight) desc')
+  .orderBy('choices.choice_id')
   .then(function(results) {
     knex('votes').distinct('voter_name')
     .join('polls', {'votes.poll_id' : 'polls.poll_id'})
@@ -184,8 +185,9 @@ app.get("/final_results/:id", (req, res) => {
   .join('choices', {'votes.choice_id': 'choices.choice_id'})
   .join('polls', {'votes.poll_id' : 'polls.poll_id'})
   .where('polls.final_result_link', req.params.id)
-  .groupBy('choice_name')
+  .groupBy('choices.choice_name', 'choices.choice_id')
   .orderByRaw('sum(vote_weight) desc')
+  .orderByRaw('choices.choice_id')
   .limit(1)
   .then(function(results) {
 
