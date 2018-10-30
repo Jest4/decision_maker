@@ -1,7 +1,17 @@
 <% include partials/_header %>
 <body>
   <% include partials/_nav %>
-        <% if (choices.length < 1) { %> THIS POLL DOES NOT EXIST! <% } else { %>
+    <% if (choices.length < 1) { %>
+  <div class="container">
+    <div class="row mb-3 mt-5">
+      <div class="col-12">
+        <h3><b>Doesn't look like anything to me.</b></h3>
+        <h4>THIS POLL DOES NOT EXIST! </h4>
+      </div>
+    </div>
+  </div>
+
+    <% } else { %>
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -38,7 +48,7 @@
       <div class="col-12">
         <button type="button" class="btn on-brand poll-submit">Vote</button>
 
-        <div id="success_vote" class="alert alert-warning alert-dismissible fade" role="alert">
+        <div id="success_vote" class="alert alert-success alert-dismissible fade" role="alert">
           <strong>Holy guacamole!</strong> Thanks for voting!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>

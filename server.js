@@ -42,7 +42,7 @@ function emailAdmin(poll_data, mailtype) {
       subject: `Vote submitted to ${poll_data.poll_name}`,
       text: `Someone has submitted a vote to your poll, ${poll_data.poll_name}!
       ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}
-      Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.final_result_link}`
+      Results! (send out this link if you want!) http://localhost:8080/results/${poll_data.result_link}`
     };
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
@@ -110,7 +110,7 @@ let final_results_url = stringGen()
   console.log('resultpage: localhost:8080/results/' + results_url)
   let poll_data = {poll_name: req.body.poll_name, admin_email: req.body.admin_email, vote_link: vote_url, result_link: results_url}
   // EMAIL ADMIN WORKS! ENABLE BELOW
-  // emailAdmin(poll_data, "create")
+  emailAdmin(poll_data, "create")
   let templateVars = {}
   templateVars.poll_data = poll_data;
   templateVars.title = "iHANGRY vote";
@@ -159,7 +159,7 @@ let voting = []
         .then(function(results) {
           let poll_data = {poll_name: results[0].poll_title, admin_email: results[0].admin_email, admin_link: results[0].result_link, result_link: results[0].final_result_link}
           console.log("POLL DATA:", poll_data, "\n / POLL DATA")
-          // emailAdmin(poll_data, "vote");
+          emailAdmin(poll_data, "vote");
         })
       });
           res.redirect("http://localhost:8080/");
@@ -189,10 +189,10 @@ app.get("/admin/:id", (req, res) => {
       .where('polls.result_link', req.params.id)
       .then(function(res_link) {
         templateVars.names = res2;
-        templateVars.title = res_link[0].poll_title;
+        if ( !res_link[0] ) { templateVars.title = 'iHangry' } else { templateVars.title = res_link[0].poll_title }
         templateVars.choices = results;
-        templateVars.final_result_link = res_link[0].final_result_link;
-        templateVars.vote_link = res_link[0].vote_link;
+        if ( !res_link[0] ) { } else { templateVars.final_result_link = res_link[0].final_result_link; }
+        if ( !res_link[0] ) { } else { templateVars.vote_link = res_link[0].vote_link; }
         res.render('admin', templateVars)
       });
     });
@@ -224,7 +224,7 @@ app.get("/results/:id", (req, res) => {
     .then(function(res2) {
       templateVars.choices = results;
       templateVars.names = res2;
-      templateVars.title = 'final_results';
+      templateVars.title = 'iHangry';
       res.render('final_results', templateVars)
     });
   });
