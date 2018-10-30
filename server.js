@@ -30,7 +30,7 @@ function emailAdmin(poll_data, mailtype) {
       subject: `${poll_data.poll_name} Poll Created on iHangry`,
       text: `Your poll, "${poll_data.poll_name}" has been created with the following URLs:
       VOTING! (send out this link!) http://localhost:8080/vote/${poll_data.vote_link}
-      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.admin_link}`
+      ADMIN PAGE! (DONT SEND THIS ONE!) http://localhost:8080/admin/${poll_data.result_link}`
     };
   mailgun.messages().send(data, function (error, body) {
     console.log(body);
