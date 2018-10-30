@@ -7,7 +7,7 @@ body h1 {
 }
 
 .logo {
-  height: 60px;
+  height: 70px;
 }
 
 .on-brand {
@@ -20,8 +20,36 @@ body h1 {
   background-color: #f29205;
   border-color: #ff9800;
   color: #fff;
+  outline-color: #ff9800;
+}
+
+.on-brand:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255,152,0,.25);
 }
 
 .navbar-toggler:focus {
   outline-color: #9c27b0;
+}
+
+.option {
+  border: 1px solid rgba(0,0,0,.400);
+  border-radius: .25rem;
+}
+
+.orange {
+  color: #ff9800;
+}
+
+.jumbotron {
+  background-color: #1201150a;
+}
+
+input[type="text"]:focus, input[type="email"]:focus{
+  outline-color: #9c27b0 !important;
+}
+
+@media (min-width: 768px){
+  .option{
+    width: 720px;
+  }
 }

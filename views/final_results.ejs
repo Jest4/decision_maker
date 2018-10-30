@@ -1,9 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<header>
-  <% let page_title = "iHangry Final Results" %>
-  <% include partials/_header %>
-</header>
+<% include partials/_header %>
+
 <body>
 
+  <% include partials/_nav %>
+  <div class="container">
+    <% if (choices.length < 1) { %>
+
+    <div class="row mb-3 mt-5">
+      <div class="col-12">
+        The early bird eats worms!!! Give 'em a chance to vote, and then check out the results. And hey, remember to vote yourself.
+      </div>
+    </div>
+
+    <% } else { %>
+
+    <div class="row mb-2 mt-4">
+      <div class="col-12">
+        Holy Guacamole! We've reached a decision. By popular demand, your feeding will be:
+        <h1 class="mt-2"><%=choices[0]['choice_name']%></h1>
+      </div>
+    </div>
+
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        <h4>Fellow Friends:</h4>
+          <%for (let i=0; i < names.length; i++) { %>
+            <%=names[i].voter_name%><br>
+          <%}%>
+      </div>
+    </div>
+
+    <div class="row mb-3 mt-3">
+      <div class="col-12">
+        Get those bibs ready.
+      </div>
+    </div>
+
+    <% } %>
+  </div>
+  <% include partials/_footer %>
 </body>
+</html>

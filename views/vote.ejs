@@ -1,15 +1,23 @@
 <% include partials/_header %>
 <body>
   <% include partials/_nav %>
+        <% if (choices.length < 1) { %> THIS POLL DOES NOT EXIST! <% } else { %>
   <div class="container">
     <div class="row">
       <div class="col-12">
         <h1><%=choices[0].poll_title%></h1>
       </div>
     </div>
-    <div class="row mb-5">
+
+    <div class="row mb-2">
       <div class="col-12">
-        <input id="voter_name" name="voter_name" type="text" placeholder="enter your name">
+        <input class="mb-2" id="voter_name" name="voter_name" type="text" placeholder=" Enter your name">
+        <div id="missing_name" class="mb-0 alert alert-warning alert-dismissible" style="display: none;" role="alert">
+          It's always better to know your dinner companions by name. What's your name?
+          <button type="button" class="hide" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -17,23 +25,31 @@
         <div class="dd" id="nestable3">
           <ol class="dd-list">
             <% for (let i of choices) { %>
-              <li class="dd-item dd3-item" data-id="<%=i.choice_id%>" data-poll_id="<%=i.poll_id%>">
-                <div class="dd-handle dd3-handle">Drag</div>
-                <div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
-              </li>
+            <li class="dd-item dd3-item" data-id="<%=i.choice_id%>" data-poll_id="<%=i.poll_id%>">
+              <div class="dd-handle dd3-handle">Drag</div>
+              <div class="dd3-content"><%= i.choice_name%> - <%=i.choice_description%></div>
+            </li>
             <% } %>
           </ol>
         </div>
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3">
       <div class="col-12">
         <button type="button" class="btn on-brand poll-submit">Vote</button>
+
+        <div id="success_vote" class="alert alert-warning alert-dismissible fade" role="alert">
+          <strong>Holy guacamole!</strong> Thanks for voting!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+  <% } %>
       </div>
     </div>
   </div>
   <% include partials/_footer %>
-
 
   <script type="text/javascript">
     $(document).ready(function(){
@@ -42,10 +58,19 @@
     });
 
     let updateOutput = function() {
-      // TODO: add descriptions to data passed to server
-      $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
+      if ( !$('#voter_name').val() ) {
+        $('#missing_name').show();
+        return;
+      } else {
+        $.post("/vote", {voter_name: $('#voter_name').val(), data: $('.dd').nestable('serialize')});
+        $('#success_vote').addClass('show');
+        $('.poll-submit').hide()
+        $('#success_vote').on('closed.bs.alert', function () {
+          window.location.replace('/');
+        });
+      }
     };
-  </script>
 
+  </script>
 </body>
 </html>

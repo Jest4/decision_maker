@@ -1,22 +1,27 @@
-
-
-function addChoices(){
-return	`<section class = 'choices_box'>
-				<input class='choice_title' type="text" required>
-				<label>Description</label>
-				<textarea class= 'choice_desc'></textarea>
-				<button class="del_choice">Delete</button>
-			</section>  `
+let addChoices = function() {
+  return	$(`
+        <div class="row option pt-2 pb-1 pl-0 pr-0 mt-1 mb-1">
+          <div class="col-4">
+            <input class='choice_title' placeholder=" List an option" type="text" required>
+          </div>
+          <div class="col-5">
+            <input class='choice_desc' placeholder=" Option description" type="text" required>
+          </div>
+          <div class="col-2">
+            <button type="button" class="btn on-brand del_choice">Delete</button>
+          </div>
+          <div class="col-1">&nbsp;</div>
+        </div>
+  `)
 }
 
 $(document).ready(function() {
 	let poll_data = {
-	choice_title:[],
-	choice_desc:[]
-}
+   choice_title:[],
+   choice_desc:[]
+ }
 
-//Diana if you change any of these class names when you work on index.ejs,
-//please change them here in these let variables
+let $intro = $('.intro');
 let add = '.add_choice';
 let del = '.del_choice';
 let $create = $('.create_poll');
@@ -28,43 +33,44 @@ let $choices = $('.choices_container');
 let $admin = $('.creator_email');
 let $pollname = $('.poll_title');
 let $button = $('#poll_form');
+let $email = $('.email_msg')
 
+$(add).click(function(){
+  event.preventDefault();
+  let newOption = addChoices();
+  $choices.append(newOption);
+  newOption.find('.del_choice').click(function(){
+    $(this).closest('.row').remove();
+  });
+});
 
+$(del).click(function(){
+  $(this).closest('.row').remove();
+});
 
+$button.submit(function (event) {
+  event.preventDefault();
+  $(this).filter('')
+  if ($admin.val() && $pollname.val() && $(title).val()){
 
-	$('body').on('click', add, function(){
+    if($admin.val()){
+     poll_data.admin_email = $admin.val();
+   }
 
-		$choices.append(addChoices());
+   if($pollname.val()){
+     poll_data.poll_name = $pollname.val();
+   }
 
-	});
-
-	$('body').on('click', del , function() {
-	    $(this).parent().remove();
-	});
-
-  $button.submit(function (event) {
-		event.preventDefault();
-		$(this).filter('')
-	if ($admin.val() && $pollname.val() && $(title).val()){
-
-		if($admin.val()){
-			poll_data.admin_email = $admin.val();
-		}
-
-		if($pollname.val()){
-			poll_data.poll_name = $pollname.val();
-		}
-
-		$(title).each(function( index ) {
+   $(title).each(function( index ) {
 
 			// console.log( index + ": " + $( this ).val())
-  			poll_data.choice_title.push($( this ).val());
+     poll_data.choice_title.push($( this ).val());
   			// console.log(poll_data.choice_title);
 
 
   		});
 
-  		$(desc).each(function( index ) {
+   $(desc).each(function( index ) {
 
   			// console.log( index + ": " + $( this ).val() )
   			poll_data.choice_desc.push($( this ).val());
@@ -72,23 +78,27 @@ let $button = $('#poll_form');
 
 
   		});
-  		console.log(poll_data);
+   console.log(poll_data);
 
-  		  $.post("/", poll_data)
-      	.then(function() {
-      		console.log('data sent');
-      	});
+   $.post("/", poll_data)
+   .then(function(results) {
+    url = `/admin/${results}`;
+    $( location ).attr("href", url)
+  });
 
-	} else{
-		alert('Please enter your email and title of the poll!');
-	}
+ } else{
+  alert('Please enter your email and title of the poll!');
+}
 
-	});
+});
 
-	$('body').on('click', function(){
-		$form.slideDown();
-		$form.show();
-	});
+
+$create.on('click', function(){
+  $intro.slideUp('slow');
+  $form.slideDown('slow');
+  $form.show();
+  $email.hide();
+});
 
 });
 

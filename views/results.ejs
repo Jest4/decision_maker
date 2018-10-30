@@ -3,36 +3,38 @@
 <header>
   <% let page_title = "iHangry Results" %>
   <% include partials/_header %>
+  <% include partials/_nav %>
 </header>
 <body>
 
   <section>
 
-Get your bib ready, you eat here: <%=choices[0].choice_name%>
+    Get your bib ready, you eat here: <%=choices[0].choice_name%>
 
-<br>
-<br>
+    <br>
+    <br>
 
-<%for (let i=0; i < choices.length; i++) { %>
+    <%for (let i=0; i < choices.length; i++) { %>
 
-<%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
+    <%=choices[i].choice_name%> points: <%=choices[i].sum%><br>
 
-<%}%>
+    <%}%>
 
-<br>
+    <br>
 
-Voters:
-<br>
+    Voters:
+    <br>
 
-<%for (let i=0; i < names.length; i++) { %>
+    <%for (let i=0; i < names.length; i++) { %>
 
-<%=names[i].voter_name%><br>
+    <%=names[i].voter_name%><br>
 
-<%}%>
+    <%}%>
 
-<br>
+    <br>
 
   </section>
+  <% include partials/_footer %>
 
 </body>
 
